@@ -13,6 +13,10 @@ lines = open('0.in').readlines()
 
 def solve1(lines):
     res = 0
+    for line in lines:
+        line = line.strip()
+        print(line)
+        res += 1
     return res
 
 
