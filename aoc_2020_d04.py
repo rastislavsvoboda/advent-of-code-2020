@@ -31,7 +31,7 @@ def is_valid2(passport):
         return False
     if not in_range(passport['eyr'], 2020, 2030):
         return False
-    if not re.match(r"#[0-9a-f]{6}", passport['hcl']):
+    if not re.match(r"^#[0-9a-f]{6}$", passport['hcl']):
         return False
     if not re.match(r"^(amb|blu|brn|gry|grn|hzl|oth)$", passport['ecl']):
         return False

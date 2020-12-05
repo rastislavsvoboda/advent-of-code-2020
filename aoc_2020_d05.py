@@ -14,10 +14,10 @@ lines = open('5.in').readlines()
 def half(min_val, max_val, ch):
     mid_val = (max_val - min_val + 1) // 2
     if ch in ['F', 'L']:
-        # Front or Left reduces max
+        # Front or Left moves max
         max_val = max_val - mid_val
     elif ch in ['B', 'R']:
-        # Back or Right reduces min
+        # Back or Right moves min
         min_val = min_val + mid_val
     else:
         assert False, "unknown char: " + ch
