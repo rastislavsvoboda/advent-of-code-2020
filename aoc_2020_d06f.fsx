@@ -4,7 +4,7 @@ open System.IO
 
 let data = 
     let text = File.ReadAllText("6.in")
-    text.Split( [|"\n\n"|], StringSplitOptions.RemoveEmptyEntries)
+    text.Split([|"\n\n"|], StringSplitOptions.RemoveEmptyEntries)
     |> List.ofArray
     |> List.map (fun a -> a.Split([|'\n'|], StringSplitOptions.RemoveEmptyEntries) |> List.ofArray)
     |> List.map (List.map Set.ofSeq)

@@ -20,11 +20,12 @@ def get_data(text):
 
 
 def parse_entry(entries):
-    passport = {}
-    for entry in entries:
-        k, v = entry.split(':')
-        passport[k] = v
-    return passport
+    # passport = {}
+    # for entry in entries:
+    #     k, v = entry.split(':')
+    #     passport[k] = v
+    # return passport
+    return { k:v for k,v in [entry.split(':') for entry in entries] }
 
 
 def is_valid1(passport):
@@ -55,25 +56,19 @@ def is_valid2(passport):
         return False
     if not re.match(r"^\d{9}$", passport['pid']):
         return False
-
     hgt = re.match(r"^(\d+)(cm|in)$", passport['hgt'])
     if not hgt:
         return False
-    if hgt.group(2) == "cm":
-        if not in_range(hgt.group(1), 150, 193):
-            return False
-    elif hgt.group(2) == "in":
-        if not in_range(hgt.group(1), 59, 76):
-            return False
-    else:
+    if hgt.group(2) == "cm" and not in_range(hgt.group(1), 150, 193):
         return False
-
+    if hgt.group(2) == "in" and not in_range(hgt.group(1), 59, 76):
+        return False
     return True
 
 
 def solve1(text):
-    # return len(list(filter(lambda p: is_valid1(p), get_data(text))))
-    return sum(1 for e in get_data(text) if is_valid1(e)) 
+    # return sum(1 for p in get_data(text) if is_valid1(p)) 
+    return len(list(filter(lambda p: is_valid1(p), get_data(text))))
 
 
 def solve2(text):

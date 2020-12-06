@@ -41,13 +41,9 @@ def is_valid2(passport):
     hgt = re.match(r"^(\d+)(cm|in)$", passport['hgt'])
     if not hgt:
         return False
-    if hgt.group(2) == "cm":
-        if not in_range(hgt.group(1), 150, 193):
-            return False
-    elif hgt.group(2) == "in":
-        if not in_range(hgt.group(1), 59, 76):
-            return False
-    else:
+    if hgt.group(2) == "cm" and not in_range(hgt.group(1), 150, 193):
+        return False
+    if hgt.group(2) == "in" and not in_range(hgt.group(1), 59, 76):
         return False
 
     return True
@@ -67,12 +63,10 @@ def solve(lines, part):
                 passport[k] = v
 
         if (not line) or (i == lines_cnt - 1):
-            if part == 1:
-                if is_valid1(passport):
-                    res += 1
-            elif part == 2:
-                if is_valid2(passport):
-                    res += 1
+            if part == 1 and is_valid1(passport):
+                res += 1
+            if part == 2 and is_valid2(passport):
+                res += 1
 
             passport = {}
 
