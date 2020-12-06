@@ -13,74 +13,52 @@ lines = open('6.in').readlines()
 
 def solve1(lines):
     res = 0
-
-    freqs = defaultdict(int) 
+    answers = defaultdict(int)
     lines_cnt = len(lines)
     for i, line in enumerate(lines):
-    # for i,line in lines:
         line = line.strip()
         if line:
-            answers = list(line)
-            for ch in answers:
-                freqs[ch] += 1
-        
-        if (not line) or (i == lines_cnt - 1):
-            print(freqs)
-            print("len: " , len(freqs))
-            print(line)
+            for q in list(line):
+                answers[q] += 1
 
-            res += len(freqs)
-            freqs = defaultdict(int)
+        if (not line) or (i == lines_cnt - 1):
+            # number of anyone answered questions is number of keys
+            res += len(answers.keys())
+            answers = defaultdict(int)
 
     return res
+
 
 def solve2(lines):
     res = 0
-
+    group_answers = []
     lines_cnt = len(lines)
-
-    people=[]
-
     for i, line in enumerate(lines):
-    # for i,line in lines:
         line = line.strip()
         if line:
+            answers = defaultdict(int)
+            for q in list(line):
+                answers[q] += 1
+            group_answers.append(answers)
 
-            freqs = defaultdict(int) 
-            answers = list(line)
-            for ch in answers:
-                freqs[ch] += 1
-            people.append(freqs)
-        
         if (not line) or (i == lines_cnt - 1):
-            # print(people)
-            # print(freqs)
-            # print("len: " , len(freqs))
-            # print(line)
+            people_cnt = len(group_answers)
+            all_questions = set()
+            for ans in group_answers:
+                for qst in ans.keys():
+                    all_questions.add(qst)
 
-            p_cnt = len(people)
-
-            qst = set()
-            for p in people:
-                for k in p.keys():
-                    qst.add(k)
-
-            for q in qst:
-                cnt = 0
-                for p in people:
-                    if q in p:
-                        cnt += 1                  
-                if cnt == len(people):
+            for qst in all_questions:
+                answered_qst_cnt = 0
+                for ans in group_answers:
+                    if qst in ans:
+                        answered_qst_cnt += 1
+                if answered_qst_cnt == people_cnt:
                     res += 1
 
-
-            # res += len(freqs)
-            # freqs = defaultdict(int)
-            people = []
+            group_answers = []
 
     return res
-
-
 
 
 print(solve1(lines))  # 6930
