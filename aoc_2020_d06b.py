@@ -13,18 +13,17 @@ lines = open('6.in').readlines()
 
 def solve1(lines):
     res = 0
-    answers = defaultdict(int)
+    qst = set()
     lines_cnt = len(lines)
     for i, line in enumerate(lines):
         line = line.strip()
         if line:
-            for q in list(line):
-                answers[q] += 1
+            for q in line:
+                qst.add(q)
 
         if (not line) or (i == lines_cnt - 1):
-            # number of anyone answered questions is number of keys
-            res += len(answers.keys())
-            answers = defaultdict(int)
+            res += len(qst)
+            qst = set()
 
     return res
 
@@ -33,21 +32,16 @@ def solve2(lines):
     res = 0
     group_answers = []
     lines_cnt = len(lines)
+    all_questions = set()
     for i, line in enumerate(lines):
         line = line.strip()
         if line:
-            answers = defaultdict(int)
-            for q in list(line):
-                answers[q] += 1
-            group_answers.append(answers)
+            for q in line:
+                all_questions.add(q)
+            group_answers.append(set(line))
 
         if (not line) or (i == lines_cnt - 1):
             people_cnt = len(group_answers)
-
-            all_questions = set()
-            for ans in group_answers:
-                for qst in ans.keys():
-                    all_questions.add(qst)
 
             for qst in all_questions:
                 answered_qst_cnt = 0
@@ -59,6 +53,7 @@ def solve2(lines):
                     res += 1
 
             group_answers = []
+            all_questions = set()
 
     return res
 
