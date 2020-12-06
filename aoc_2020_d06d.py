@@ -19,6 +19,8 @@ for grp in groups:
         g.append(set(ans))
     data.append(g)
 
+print(data)
+
 print(sum(map(lambda grp: len(functools.reduce(lambda a, b: a.union(b), grp)), data)))
 # print(sum(map(lambda grp: len(functools.reduce(lambda a, b: a | b, grp)), data)))
 print(sum(map(lambda grp: len(functools.reduce(lambda a, b: a.intersection(b), grp)), data)))

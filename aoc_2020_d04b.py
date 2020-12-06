@@ -6,12 +6,12 @@ import time
 # .\get.ps1 4
 
 start = datetime.now()
-lines = open('4.in').read()
+text = open('4.in').read()
 
 
-def get_data(lines):
+def get_data(text):
     data = []
-    for grp in lines.split('\n\n'):
+    for grp in text.split('\n\n'):
         entries = []
         for row in grp.split():
             entries.append(row)
@@ -71,16 +71,17 @@ def is_valid2(passport):
     return True
 
 
-def solve1(lines):
-    return len(list(filter(lambda p: is_valid1(p), get_data(lines))))
+def solve1(text):
+    # return len(list(filter(lambda p: is_valid1(p), get_data(text))))
+    return sum(1 for e in get_data(text) if is_valid1(e)) 
 
 
-def solve2(lines):
-    return len(list(filter(lambda p: is_valid2(p), get_data(lines))))
+def solve2(text):
+    return len(list(filter(lambda p: is_valid2(p), get_data(text))))
 
 
-print(solve1(lines))  # 219
-print(solve2(lines))  # 127
+print(solve1(text))  # 219
+print(solve2(text))  # 127
 
 stop = datetime.now()
 print("duration:", stop - start)

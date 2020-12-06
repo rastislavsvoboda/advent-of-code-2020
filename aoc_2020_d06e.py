@@ -29,6 +29,7 @@ def parse_entry(entries):
 
 def solve1(lines):
     return sum(map(lambda grp: len(functools.reduce(lambda a, b: a.union(b), grp)), get_data(lines)))
+    # return sum(len(functools.reduce(lambda a, b: a.union(b), grp)) for grp in get_data(lines))
 
 
 def solve2(lines):
