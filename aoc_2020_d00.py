@@ -9,23 +9,51 @@ import time
 
 start = datetime.now()
 lines = open('0.in').readlines()
+text = open('0.in').read()
 
 
-def solve1(lines):
+def get_data(text):
+    data = []
+    for grp in text.split('\n\n'):
+        entries = []
+        for row in grp.split():
+            entries.append(row)
+        data.append(parse_entry(entries))
+    return data
+
+
+def parse_entry(entries):
+    # answers = []
+    # for entry in entries:
+    #     answers.append(set(entry))
+    # return answers
+    return entries
+
+
+def solve1_l(lines):
     res = 0
+
     for line in lines:
         line = line.strip()
         print(line)
         res += 1
+
     return res
 
 
-def solve2(lines):
+def solve1_t(text):
     res = 0
+    
+    data = get_data(text)
+    for d in data:
+        print(d)
+        res += 1
+
     return res
 
 
-print(solve1(lines))  #
+print(solve1_l(lines))  #
+print(solve1_t(text))  #
 # print(solve2(lines))  #
 
 stop = datetime.now()
