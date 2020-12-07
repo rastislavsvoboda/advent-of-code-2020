@@ -21,15 +21,11 @@ def get_outside_bags(name, bags):
 
 
 def count_bags(name, bags):
-    if bags[name] == []:
-        # no inside bags, count only itself
-        return 1
-
-    x = 1
+    cnt = 1  # itself
     for num, inside_name in bags[name]:
-        x += num * count_bags(inside_name, bags)
-
-    return x
+        cnt += num * count_bags(inside_name, bags)
+    return cnt
+    # return 1 + sum(map(lambda x: x[0] * count_bags(x[1], bags), bags[name]))
 
 
 def get_data(lines):
@@ -62,14 +58,14 @@ def solve1(lines):
         seen.add(name)
         for bag in get_outside_bags(name, bags):
             todo.append(bag)
-    res = len(seen) - 1
-    return res
+    num_seen = len(seen)
+    return num_seen - 1  # don't count itself
 
 
 def solve2(lines):
     bags = get_data(lines)
-    res = count_bags("shiny gold", bags) - 1
-    return res
+    cnt = count_bags("shiny gold", bags)
+    return cnt - 1  # don't count itself
 
 
 print(solve1(lines))  # 142
