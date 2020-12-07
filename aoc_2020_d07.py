@@ -11,101 +11,65 @@ start = datetime.now()
 lines = open('7.in').readlines()
 
 
-def count(name, bags):
-    total = set()
-    for k,val in iter(bags.items()):
-        for n,nam in val:
-            if nam == name:
-                total.add(k)
-    return total
+def get_outside_bags(name, bags):
+    all_outside_bags = set()
+    for outside_name, inside_bags in iter(bags.items()):
+        for _, inside_name in inside_bags:
+            if inside_name == name:
+                all_outside_bags.add(outside_name)
+    return all_outside_bags
 
-def count2(name, bags):
+
+def count_bags(name, bags):
     if bags[name] == []:
+        # no inside bags, count only itself
         return 1
 
     x = 1
-    for num, nam in bags[name]:
-        x += num * count2(nam, bags)
+    for num, inside_name in bags[name]:
+        x += num * count_bags(inside_name, bags)
 
     return x
-            
+
+
+def get_data(lines):
+    bags = {}
+    for line in lines:
+        words = line.strip().split()
+        src = " ".join(words[0:2])
+        dst = []
+        if words[4:6] == ["no", "other"]:
+            bags[src] = dst
+        else:
+            inside = words[4:]
+            for i in range(0, len(inside), 4):
+                num = int(inside[i])
+                name = " ".join(inside[i + 1:i + 3])
+                dst.append((num, name))
+            bags[src] = dst
+    return bags
 
 
 def solve1(lines):
-    res = 0
-    bags = {}
-    for line in lines:
-        line = line.strip()
-        words = line.split()
-        src = " ".join(words[0:2])
-        # print(src)
-        dst = []
-        if words[4:6] == ["no", "other"]:
-            bags[src] = dst
-        else:
-            inside = words[4:]
-            # print(inside)
-            for i in range(0,len(inside),4):
-                n = int(inside[i])
-                name = " ".join(inside[i+1:i+3])
-                dst.append((n, name))
-            bags[src] = dst
-
-        # print(words)
-        res += 1
-    # print(bags)
-
+    bags = get_data(lines)
     seen = set()
-    
     todo = deque()
-
     todo.append("shiny gold")
-    total = set()
-
-
-    while len(todo) > 0:
-        n = todo.pop()
-
-        found = count(n, bags)
-        for f in found:
-            if f in seen:
-                continue
-            seen.add(f)
-            todo.append(f)
-    
-    res = len(seen)
-
+    while todo:
+        name = todo.pop()
+        if name in seen:
+            continue
+        seen.add(name)
+        for bag in get_outside_bags(name, bags):
+            todo.append(bag)
+    res = len(seen) - 1
     return res
 
+
 def solve2(lines):
-    res = 0
-    bags = {}
-    for line in lines:
-        line = line.strip()
-        words = line.split()
-        src = " ".join(words[0:2])
-        # print(src)
-        dst = []
-        if words[4:6] == ["no", "other"]:
-            bags[src] = dst
-        else:
-            inside = words[4:]
-            # print(inside)
-            for i in range(0,len(inside),4):
-                n = int(inside[i])
-                name = " ".join(inside[i+1:i+3])
-                dst.append((n, name))
-            bags[src] = dst
-
-        # print(words)
-        res += 1
-    # print(bags)
-
-    
-    res = count2("shiny gold", bags)
-
-    return res - 1
-
+    bags = get_data(lines)
+    res = count_bags("shiny gold", bags) - 1
+    return res
 
 
 print(solve1(lines))  # 142
