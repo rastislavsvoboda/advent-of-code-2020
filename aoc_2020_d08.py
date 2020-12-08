@@ -42,24 +42,21 @@ def solve1(lines):
 
 
 def solve2(lines):
-    data = [line.split(' ') for line in lines]
-    modified = set()
-
-    for i, line in enumerate(data):
-        # modifie eactly one nop -> jmp or jmp -> nop
-        if line[0] == "nop" and i not in modified:
+    for i in range(len(lines)):
+        data = [line.split(' ') for line in lines]
+        # modify exactly one nop -> jmp or jmp -> nop
+        if data[i][0] == "nop":
             data[i][0] = "jmp"
-            modified.add(i)
-        elif line[0] == "jmp" and i not in modified:
+        elif data[i][0] == "jmp":
             data[i][0] = "nop"
-            modified.add(i)
         else:
             continue
 
-        done = True
         acc = 0
-        seen = set()
         ip = 0
+        seen = set()
+        done = True
+        
         while ip < len(data):
             if ip in seen:
                 done = False
@@ -69,9 +66,6 @@ def solve2(lines):
 
         if done:
             break
-
-        # use original data
-        data = [line.split(' ') for line in lines]
 
     return acc
 
