@@ -11,8 +11,6 @@ start = datetime.now()
 lines = open('8.in').readlines()
 # lines = open('8.0').readlines()
 
-# regs = {"a": 0}
-
 def process(instr, ip, acc):
     cmd = instr[0]
     val = int(instr[1])
@@ -23,12 +21,11 @@ def process(instr, ip, acc):
     if cmd == "jmp":
         ip += val
         return ip, acc
-
-    return ip + 1, acc
+    return (ip + 1, acc)
 
 
 def solve1(lines):
-    data = [line.split(' ') for line in lines]
+    data = [line.split() for line in lines]
     seen = set()
     ip = 0
     acc = 0
@@ -43,7 +40,7 @@ def solve1(lines):
 
 def solve2(lines):
     for i in range(len(lines)):
-        data = [line.split(' ') for line in lines]
+        data = [line.split() for line in lines]
         # modify exactly one nop -> jmp or jmp -> nop
         if data[i][0] == "nop":
             data[i][0] = "jmp"
