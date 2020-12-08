@@ -11,43 +11,38 @@ start = datetime.now()
 lines = open('8.in').readlines()
 # lines = open('8.0').readlines()
 
-regs = {"a": 0}
+# regs = {"a": 0}
 
-
-def parse(line):
-    return line.split(' ')
-
-
-def process(instr, ip):
-    r = "a"
+def process(instr, ip, acc):
     cmd = instr[0]
-    v = int(instr[1])
+    val = int(instr[1])
     if cmd == "nop":
         None
     if cmd == "acc":
-        regs[r] = regs[r] + v
+        acc = acc + val
     if cmd == "jmp":
-        ip += v
-        return ip
+        ip += val
+        return ip, acc
 
-    return ip + 1
+    return ip + 1, acc
 
 
 def solve1(lines):
-    data = [parse(line) for line in lines]
+    data = [line.split(' ') for line in lines]
     seen = set()
     ip = 0
+    acc = 0
     while ip < len(data):
         if ip in seen:
             # if instruction repeats, we are done
             break
         seen.add(ip)
-        ip = process(data[ip], ip)
-    return regs["a"]
+        ip, acc = process(data[ip], ip, acc)
+    return acc
 
 
 def solve2(lines):
-    data = [parse(line) for line in lines]
+    data = [line.split(' ') for line in lines]
     modified = set()
 
     for i, line in enumerate(data):
@@ -62,7 +57,7 @@ def solve2(lines):
             continue
 
         done = True
-        regs["a"] = 0
+        acc = 0
         seen = set()
         ip = 0
         while ip < len(data):
@@ -70,15 +65,15 @@ def solve2(lines):
                 done = False
                 break
             seen.add(ip)
-            ip = process(data[ip], ip)
+            ip, acc = process(data[ip], ip, acc)
 
         if done:
             break
 
         # use original data
-        data = [parse(line) for line in lines]
+        data = [line.split(' ') for line in lines]
 
-    return regs["a"]
+    return acc
 
 
 print(solve1(lines))  # 1548
