@@ -1,7 +1,7 @@
 from datetime import datetime
 from datetime import timedelta
 from collections import defaultdict, deque
-import copy
+from copy import deepcopy
 import re
 import time
 
@@ -11,18 +11,17 @@ start = datetime.now()
 lines = open('8.in').readlines()
 # lines = open('8.0').readlines()
 
-
 def process(instr, ip, acc):
     cmd = instr[0]
     val = int(instr[1])
     if cmd == "nop":
-        ip += 1
+        None
     if cmd == "acc":
-        acc += val
-        ip += 1
+        acc = acc + val
     if cmd == "jmp":
         ip += val
-    return (ip, acc)
+        return ip, acc
+    return (ip + 1, acc)
 
 
 def solve1(lines):
@@ -40,8 +39,9 @@ def solve1(lines):
 
 
 def solve2(lines):
+    original = [line.split() for line in lines]
     for i in range(len(lines)):
-        data = [line.split() for line in lines]
+        data = deepcopy(original)
         # modify exactly one nop -> jmp or jmp -> nop
         if data[i][0] == "nop":
             data[i][0] = "jmp"
@@ -50,18 +50,19 @@ def solve2(lines):
         else:
             continue
 
-        seen = set()
-        ip = 0
         acc = 0
+        ip = 0
+        seen = set()
+        done = True
+        
         while ip < len(data):
             if ip in seen:
-                # if instruction repeats, we are done current program
+                done = False
                 break
             seen.add(ip)
             ip, acc = process(data[ip], ip, acc)
 
-        if ip >= len(data):
-            # if we passed through, we are compeled
+        if done:
             break
 
     return acc
