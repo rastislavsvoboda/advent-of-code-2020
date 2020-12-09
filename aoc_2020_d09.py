@@ -10,77 +10,51 @@ import time
 start = datetime.now()
 lines = open('9.in').readlines()
 
-def is_sum(A, indx, pream):
-    s = indx - pream
-    B = A[indx-pream: indx-pream+pream]
-    for i in range(len(B)):
-        for j in range(i, len(B)):
-            if B[i]+B[j]==A[indx]:
+
+def is_sum(arr, indx, pream):
+    sub_arr = arr[indx - pream:indx]
+    for i in range(len(sub_arr)):
+        for j in range(i, len(sub_arr)):
+            if sub_arr[i] + sub_arr[j] == arr[indx]:
                 return True
     return False
 
-def is_sum2(A, target):
-    for i in range(len(A)):
-        s=A[i]
-        for j in range(i+1,len(A)):
-            s+=A[j]
-            if s==target:
-                return A[i:j+1]
-            if s>target:
+
+def find_range(arr, target):
+    for i in range(len(arr)):
+        s = arr[i]
+        for j in range(i + 1, len(arr)):
+            s += arr[j]
+            if s == target:
+                return arr[i:j + 1]
+            if s > target:
                 break
     return None
 
 
-
-def solve1(lines):
-    res = 0
-
-    A=[]
+def solve(lines):
+    res1 = None
+    res2 = None
+    A = []
     for line in lines:
         line = line.strip()
         A.append(int(line))
-        # print(line)
-
     pream = 25
     i = pream
-    while i<len(A):
-        if not is_sum(A,i,pream):
-            res = A[i]
+    while i < len(A):
+        if not is_sum(A, i, pream):
+            res1 = A[i]
             break
-        i+=1
-
-    return res
-
-def solve2(lines):
-    res = 0
-
-    A=[]
-    for line in lines:
-        line = line.strip()
-        A.append(int(line))
-        # print(line)
-
-    pream = 25
-    i = pream
-    while i<len(A):
-        if not is_sum(A,i,pream):
-            target = A[i]
-            break
-        i+=1
+        i += 1
+    assert res1 is not None
+    cont_range = find_range(A, res1)
+    assert cont_range is not None
+    sorted_range = list(sorted(cont_range))
+    res2 = sorted_range[0] + sorted_range[-1]
+    return res1, res2
 
 
-    x = is_sum2(A,target)
-    x = list(sorted(x))
-    a=x[0]
-    b=x[-1]
-    print(a,b)
-    res = a+b    
+print(solve(lines))  # 144381670, 20532569
 
-    return res
-
-
-print(solve1(lines))  # 144381670
-print(solve2(lines))  #
-# 13 zle
 stop = datetime.now()
 print("duration:", stop - start)
