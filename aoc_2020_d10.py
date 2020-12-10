@@ -36,30 +36,22 @@ def solve1(lines):
     return diff1 * diff3
 
 
-def get_compatible(adapters, joltage):
-    compatible = []
-    if joltage + 1 in adapters:
-        compatible.append(joltage + 1)
-    if joltage + 2 in adapters:
-        compatible.append(joltage + 2)
-    if joltage + 3 in adapters:
-        compatible.append(joltage + 3)
-    return compatible
-
 
 def solve2(lines):
     adapters = [int(x) for x in lines]
     sorted_adapters = list(sorted(adapters))
 
+    # add lowest and highest
     outlet_jolts = 0
     sorted_adapters.insert(0, outlet_jolts)
     device_jolts = max(adapters) + 3
     sorted_adapters.append(device_jolts)
 
-    # inspired from internet
+    ## inspired from internet
+
     compatible = {}
-    for jolt in sorted_adapters[:-1]:
-        compatible[jolt] = get_compatible(sorted_adapters, jolt)
+    for i, jolt in enumerate(sorted_adapters[:-1]):
+        compatible[jolt] = [j for j in sorted_adapters[i+1:i+4] if j - jolt <= 3]
 
     numArrange = {sorted_adapters[-1]: 1}
     for jolt in reversed(sorted_adapters[:-1]):
