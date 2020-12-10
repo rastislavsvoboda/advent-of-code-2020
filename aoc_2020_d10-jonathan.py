@@ -33,15 +33,14 @@ DP = {}
 # dp(i) = the number of ways to complete the adapter chain given
 #         that you are currently at adapter xs[i]
 
-
 def dp(i):
     if i == len(xs) - 1:
         return 1
     if i in DP:
         return DP[i]
     ans = 0
-    for j in range(i + 1, len(xs)):
-        if xs[j] - xs[i] <= 3:
+    for j in range(i + 1, i + 4):
+        if j < len(xs) and xs[j] - xs[i] <= 3:
             # one way to get from i to the end is to first step to j
             # the number of paths from i that *start* by stepping to xs[j] is DP[j]
             ans += dp(j)
