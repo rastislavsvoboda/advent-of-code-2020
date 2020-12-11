@@ -41,9 +41,8 @@ def count1(state, y, x):
     for d in range(8):
         yy = y + DY[d]
         xx = x + DX[d]
-        if 0 <= yy < Y and 0 <= xx < X:
-            if state[yy][xx] == '#':
-                cnt += 1
+        if 0 <= yy < Y and 0 <= xx < X and state[yy][xx] == '#':
+            cnt += 1
     return cnt
 
 
@@ -77,7 +76,7 @@ def solve1(lines):
         t += 1
         # print_state(state, t)
 
-    res = sum(c == "#" for i, c in enumerate(serialized))
+    res = sum(c == "#" for c in serialized)
     return res
 
 
@@ -90,19 +89,11 @@ def count2(state, y, x):
     for d in range(8):
         yy = y + DY[d]
         xx = x + DX[d]
-        while True:
-            if 0 <= yy < Y and 0 <= xx < X:
-                if state[yy][xx] == '.':
-                    yy += DY[d]
-                    xx += DX[d]
-                    continue
-                if state[yy][xx] == '#':
-                    cnt += 1
-                    break
-                if state[yy][xx] == 'L':
-                    break
-            else:
-                break
+        while 0 <= yy < Y and 0 <= xx < X and state[yy][xx] == '.':
+            yy += DY[d]
+            xx += DX[d]
+        if 0 <= yy < Y and 0 <= xx < X and state[yy][xx] == '#':
+            cnt += 1
     return cnt
 
 
@@ -121,7 +112,6 @@ def solve2(lines):
         new_state = copy.deepcopy(state)
         for y, line in enumerate(state):
             for x, c in enumerate(line):
-                cnt = 0
                 if c == '.':
                     continue
                 cnt = count2(state, y, x)
@@ -137,7 +127,7 @@ def solve2(lines):
         t += 1
         # print_state(state, t)
 
-    res = sum(c == "#" for i, c in enumerate(serialized))
+    res = sum(c == "#" for c in serialized)
     return res
 
 
