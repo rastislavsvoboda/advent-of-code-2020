@@ -11,28 +11,23 @@ start = datetime.now()
 lines = open('11.in').readlines()
 
 
-def print_state(state, time):
-    print("time", time)
+def print_state(state):
     for line in state:
         print(''.join(line))
 
 
-def parse_state(lines):
-    state = []
-    row = []
-    for line in lines:
-        line = line.strip()
-        row = list(line)
-        state.append(row)
-    return state
+def count_occ(state):
+    cnt = 0
+    Y = len(state)
+    X = len(state[0])
+    for y in range(Y):
+        for x in range(X):
+            if state[y][x] == "#":
+                cnt += 1
+    return cnt
 
 
-def serialize_state(state):
-    result = ''.join(map(lambda line: ''.join(line), state))
-    return result
-
-
-def count1(state, y, x):
+def count_adj1(state, y, x):
     cnt = 0
     Y = len(state)
     X = len(state[0])
@@ -47,40 +42,28 @@ def count1(state, y, x):
 
 
 def solve1(lines):
-    res = 0
-    t = 0
-    state = parse_state(lines)
-    Y = len(state)
-    X = len(state[0])
-    history = set()
-
-    t = 0
-    # print_state(state, t)
-    history.add(serialize_state(state))
+    state = [list(line.strip()) for line in lines]
     while True:
+        change = False
         new_state = copy.deepcopy(state)
         for y, line in enumerate(state):
             for x, c in enumerate(line):
                 if c == '.':
                     continue
-                cnt = count1(state, y, x)
+                cnt = count_adj1(state, y, x)
                 if c == 'L' and cnt == 0:
                     new_state[y][x] = '#'
+                    change = True
                 elif c == '#' and cnt >= 4:
                     new_state[y][x] = 'L'
+                    change = True
         state = new_state
-        serialized = serialize_state(state)
-        if serialized in history:
+        if not change:
             break
-        history.add(serialized)
-        t += 1
-        # print_state(state, t)
-
-    res = sum(c == "#" for c in serialized)
-    return res
+    return count_occ(state)
 
 
-def count2(state, y, x):
+def count_adj2(state, y, x):
     cnt = 0
     Y = len(state)
     X = len(state[0])
@@ -98,37 +81,25 @@ def count2(state, y, x):
 
 
 def solve2(lines):
-    res = 0
-    t = 0
-    state = parse_state(lines)
-    Y = len(state)
-    X = len(state[0])
-    history = set()
-
-    t = 0
-    # print_state(state, t)
-    history.add(serialize_state(state))
+    state = [list(line.strip()) for line in lines]
     while True:
+        changed = False
         new_state = copy.deepcopy(state)
         for y, line in enumerate(state):
             for x, c in enumerate(line):
                 if c == '.':
                     continue
-                cnt = count2(state, y, x)
+                cnt = count_adj2(state, y, x)
                 if c == 'L' and cnt == 0:
                     new_state[y][x] = '#'
+                    changed = True
                 elif c == '#' and cnt >= 5:
                     new_state[y][x] = 'L'
+                    changed = True
         state = new_state
-        serialized = serialize_state(state)
-        if serialized in history:
+        if not changed:
             break
-        history.add(serialized)
-        t += 1
-        # print_state(state, t)
-
-    res = sum(c == "#" for c in serialized)
-    return res
+    return count_occ(state)
 
 
 print(solve1(lines))  # 2346
