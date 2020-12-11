@@ -32,6 +32,21 @@ def serialize_state(state):
     return result
 
 
+def count1(state, y, x):
+    cnt = 0
+    Y = len(state)
+    X = len(state[0])
+    DY = [-1, 1, 0, 0, -1, 1, -1, 1]
+    DX = [0, 0, -1, 1, -1, -1, 1, 1]
+    for d in range(8):
+        yy = y + DY[d]
+        xx = x + DX[d]
+        if 0 <= yy < Y and 0 <= xx < X:
+            if state[yy][xx] == '#':
+                cnt += 1
+    return cnt
+
+
 def solve1(lines):
     res = 0
     t = 0
@@ -47,16 +62,9 @@ def solve1(lines):
         new_state = copy.deepcopy(state)
         for y, line in enumerate(state):
             for x, c in enumerate(line):
-                cnt = 0
                 if c == '.':
                     continue
-                for (yy, xx) in [(y - 1, x), (y + 1, x), (y, x - 1),
-                                 (y, x + 1), (y - 1, x - 1), (y + 1, x - 1),
-                                 (y - 1, x + 1), (y + 1, x + 1)]:
-                    if 0 <= yy < Y and 0 <= xx < X:
-                        if state[yy][xx] == '#':
-                            cnt += 1
-                # print(y,x,cnt)
+                cnt = count1(state, y, x)
                 if c == 'L' and cnt == 0:
                     new_state[y][x] = '#'
                 elif c == '#' and cnt >= 4:
@@ -69,33 +77,25 @@ def solve1(lines):
         t += 1
         # print_state(state, t)
 
-    for i, c in enumerate(serialized):
-        if c == "#":
-            res += 1
-
+    res = sum(c == "#" for i, c in enumerate(serialized))
     return res
 
 
-def count_adj(state, y, x):
+def count2(state, y, x):
     cnt = 0
     Y = len(state)
     X = len(state[0])
-
-    # for (yy, xx) in [(y - 1, x), (y + 1, x), (y, x - 1), (y, x + 1), (y - 1, x - 1), (y + 1, x - 1),  (y - 1, x + 1), (y + 1, x + 1)]:
-    for (dy, dx) in [(-1, 0), (+1, 0), (0, -1), (0, +1), (-1, -1), (+1, -1),
-                     (-1, +1), (+1, +1)]:
-
-        yy = y - dy
-        xx = x - dx
-
+    DY = [-1, 1, 0, 0, -1, 1, -1, 1]
+    DX = [0, 0, -1, 1, -1, -1, 1, 1]
+    for d in range(8):
+        yy = y + DY[d]
+        xx = x + DX[d]
         while True:
-
             if 0 <= yy < Y and 0 <= xx < X:
                 if state[yy][xx] == '.':
-                    yy = yy - dy
-                    xx = xx - dx
+                    yy += DY[d]
+                    xx += DX[d]
                     continue
-
                 if state[yy][xx] == '#':
                     cnt += 1
                     break
@@ -103,7 +103,6 @@ def count_adj(state, y, x):
                     break
             else:
                 break
-
     return cnt
 
 
@@ -125,7 +124,7 @@ def solve2(lines):
                 cnt = 0
                 if c == '.':
                     continue
-                cnt = count_adj(state, y, x)
+                cnt = count2(state, y, x)
                 if c == 'L' and cnt == 0:
                     new_state[y][x] = '#'
                 elif c == '#' and cnt >= 5:
@@ -138,10 +137,7 @@ def solve2(lines):
         t += 1
         # print_state(state, t)
 
-    for i, c in enumerate(serialized):
-        if c == "#":
-            res += 1
-
+    res = sum(c == "#" for i, c in enumerate(serialized))
     return res
 
 
