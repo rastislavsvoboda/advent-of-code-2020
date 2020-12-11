@@ -11,11 +11,6 @@ start = datetime.now()
 lines = open('11.in').readlines()
 
 
-def print_state(state):
-    for line in state:
-        print(''.join(line))
-
-
 def count_occ(state):
     cnt = 0
     Y = len(state)
@@ -27,7 +22,7 @@ def count_occ(state):
     return cnt
 
 
-def count_adj1(state, y, x):
+def count_adj(state, y, x, p1):
     cnt = 0
     Y = len(state)
     X = len(state[0])
@@ -36,12 +31,15 @@ def count_adj1(state, y, x):
     for d in range(8):
         yy = y + DY[d]
         xx = x + DX[d]
+        while 0 <= yy < Y and 0 <= xx < X and state[yy][xx] == '.' and not p1:
+            yy += DY[d]
+            xx += DX[d]
         if 0 <= yy < Y and 0 <= xx < X and state[yy][xx] == '#':
             cnt += 1
     return cnt
 
 
-def solve1(lines):
+def solve(lines, p1):
     state = [list(line.strip()) for line in lines]
     while True:
         change = False
@@ -50,11 +48,11 @@ def solve1(lines):
             for x, c in enumerate(line):
                 if c == '.':
                     continue
-                cnt = count_adj1(state, y, x)
+                cnt = count_adj(state, y, x, p1)
                 if c == 'L' and cnt == 0:
                     new_state[y][x] = '#'
                     change = True
-                elif c == '#' and cnt >= 4:
+                elif c == '#' and cnt >= (4 if p1 else 5):
                     new_state[y][x] = 'L'
                     change = True
         state = new_state
@@ -63,47 +61,8 @@ def solve1(lines):
     return count_occ(state)
 
 
-def count_adj2(state, y, x):
-    cnt = 0
-    Y = len(state)
-    X = len(state[0])
-    DY = [-1, 1, 0, 0, -1, 1, -1, 1]
-    DX = [0, 0, -1, 1, -1, -1, 1, 1]
-    for d in range(8):
-        yy = y + DY[d]
-        xx = x + DX[d]
-        while 0 <= yy < Y and 0 <= xx < X and state[yy][xx] == '.':
-            yy += DY[d]
-            xx += DX[d]
-        if 0 <= yy < Y and 0 <= xx < X and state[yy][xx] == '#':
-            cnt += 1
-    return cnt
-
-
-def solve2(lines):
-    state = [list(line.strip()) for line in lines]
-    while True:
-        changed = False
-        new_state = copy.deepcopy(state)
-        for y, line in enumerate(state):
-            for x, c in enumerate(line):
-                if c == '.':
-                    continue
-                cnt = count_adj2(state, y, x)
-                if c == 'L' and cnt == 0:
-                    new_state[y][x] = '#'
-                    changed = True
-                elif c == '#' and cnt >= 5:
-                    new_state[y][x] = 'L'
-                    changed = True
-        state = new_state
-        if not changed:
-            break
-    return count_occ(state)
-
-
-print(solve1(lines))  # 2346
-print(solve2(lines))  # 2111
+print(solve(lines, True))  # 2346
+print(solve(lines, False))  # 2111
 
 stop = datetime.now()
 print("duration:", stop - start)
