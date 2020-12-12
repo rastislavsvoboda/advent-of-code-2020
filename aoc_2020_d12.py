@@ -83,57 +83,57 @@ def solve2(lines):
             y += val * wy
             x += val * wx
         elif dr == "L":
-            hh = heading(wy, wx)
+            wh = heading(wy, wx)
             if val == 90:
-                if hh == "NE":
+                if wh == "NE":
                     wy, wx = -abs(wx), -abs(wy)
-                elif hh == "NW":
+                elif wh == "NW":
                     wy, wx = abs(wx), -abs(wy)
-                elif hh == "SW":
+                elif wh == "SW":
                     wy, wx = abs(wx), abs(wy)
-                elif hh == "SE":
+                elif wh == "SE":
                     wy, wx = -abs(wx), abs(wy)
                 else:
-                    assert False, hh
+                    assert False, wh
             elif val == 180:
                 wy, wx = -wy, -wx
             elif val == 270:
-                if hh == "NE":
+                if wh == "NE":
                     wy, wx = abs(wx), abs(wy)
-                elif hh == "NW":
+                elif wh == "NW":
                     wy, wx = -abs(wx), abs(wy)
-                elif hh == "SW":
+                elif wh == "SW":
                     wy, wx = -abs(wx), -abs(wy)
-                elif hh == "SE":
+                elif wh == "SE":
                     wy, wx = abs(wx), -abs(wy)
                 else:
-                    assert False, hh
+                    assert False, wh
         elif dr == "R":
-            hh = heading(wy, wx)
+            wh = heading(wy, wx)
             if val == 90:
-                if hh == "NE":
+                if wh == "NE":
                     wy, wx = abs(wx), abs(wy)
-                elif hh == "NW":
+                elif wh == "NW":
                     wy, wx = -abs(wx), abs(wy)
-                elif hh == "SW":
+                elif wh == "SW":
                     wy, wx = -abs(wx), -abs(wy)
-                elif hh == "SE":
+                elif wh == "SE":
                     wy, wx = abs(wx), -abs(wy)
                 else:
-                    assert False, hh
+                    assert False, wh
             elif val == 180:
                 wy, wx = -wy, -wx
             elif val == 270:
-                if hh == "NE":
+                if wh == "NE":
                     wy, wx = -abs(wx), -abs(wy)
-                elif hh == "NW":
+                elif wh == "NW":
                     wy, wx = abs(wx), -abs(wy)
-                elif hh == "SW":
+                elif wh == "SW":
                     wy, wx = abs(wx), abs(wy)
-                elif hh == "SE":
+                elif wh == "SE":
                     wy, wx = -abs(wx), abs(wy)
                 else:
-                    assert False, hh
+                    assert False, wh
 
     res = abs(x) + abs(y)
     return res
