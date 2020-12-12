@@ -39,11 +39,9 @@ def process1(acc, line):
         elif head == "W":
             x -= val
     elif dr == "L":
-        st = val // 90
-        hd = (hd - st) % 4
+        hd = (hd - val // 90) % 4
     elif dr == "R":
-        st = val // 90
-        hd = (hd + st) % 4
+        hd = (hd + val // 90) % 4
     return (y, x, hd)
 
 
@@ -66,33 +64,12 @@ def process2(acc, line):
     elif dr == "F":
         y += val * wy
         x += val * wx
-    else:
-        assert dr in ["L", "R"]
-        if val == 180:
-            wy, wx = -wy, -wx
-
-        # waypoint heading
-        wh = ("N" if wy <= 0 else "S") + ("E" if wx >= 0 else "W")
-
-        if (dr == "L" and val == 90) or (dr == "R" and val == 270):
-            if wh == "NE":
-                wy, wx = -abs(wx), -abs(wy)
-            elif wh == "NW":
-                wy, wx = abs(wx), -abs(wy)
-            elif wh == "SW":
-                wy, wx = abs(wx), abs(wy)
-            elif wh == "SE":
-                wy, wx = -abs(wx), abs(wy)
-
-        if (dr == "R" and val == 90) or (dr == "L" and val == 270):
-            if wh == "NE":
-                wy, wx = abs(wx), abs(wy)
-            elif wh == "NW":
-                wy, wx = -abs(wx), abs(wy)
-            elif wh == "SW":
-                wy, wx = -abs(wx), -abs(wy)
-            elif wh == "SE":
-                wy, wx = abs(wx), -abs(wy)
+    elif dr == "L":
+        for _ in range(val // 90):
+            wy, wx = -wx, wy
+    elif dr == "R":
+        for _ in range(val // 90):
+            wy, wx = wx, -wy
     return (y, x, wy, wx)
 
 
