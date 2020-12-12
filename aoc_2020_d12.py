@@ -88,8 +88,6 @@ def solve2(lines):
                     wy, wx = abs(wx), abs(wy)
                 elif wh == "SE":
                     wy, wx = -abs(wx), abs(wy)
-                else:
-                    assert False, wh
 
             if (dr == "R" and val == 90) or (dr == "L" and val == 270):
                 if wh == "NE":
@@ -100,8 +98,6 @@ def solve2(lines):
                     wy, wx = -abs(wx), -abs(wy)
                 elif wh == "SE":
                     wy, wx = abs(wx), -abs(wy)
-                else:
-                    assert False, wh
 
     res = abs(x) + abs(y)
     return res
