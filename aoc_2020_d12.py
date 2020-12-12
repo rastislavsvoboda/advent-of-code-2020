@@ -50,13 +50,6 @@ def solve1(lines):
     return res
 
 
-def heading(wy, wx):
-    h = ""
-    h += "N" if wy <= 0 else "S"
-    h += "E" if wx >= 0 else "W"
-    return h
-
-
 def solve2(lines):
     res = 0
     # position
@@ -64,13 +57,9 @@ def solve2(lines):
     # waypoint position
     (wy, wx) = (-1, 10)
 
-    DIRS = "NESW"
-    hd = 1
-
     for line in lines:
         line = line.strip()
         dr, val = line[0], int(line[1:])
-        head = DIRS[hd]
         if dr == "N":
             wy -= val
         elif dr == "S":
@@ -82,35 +71,27 @@ def solve2(lines):
         elif dr == "F":
             y += val * wy
             x += val * wx
-        elif dr == "L":
-            wh = heading(wy, wx)
-            if val == 90:
-                if wh == "NE":
-                    wy, wx = -abs(wx), -abs(wy)
-                elif wh == "NW":
-                    wy, wx = abs(wx), -abs(wy)
-                elif wh == "SW":
-                    wy, wx = abs(wx), abs(wy)
-                elif wh == "SE":
-                    wy, wx = -abs(wx), abs(wy)
-                else:
-                    assert False, wh
-            elif val == 180:
+        else:
+            assert dr in ["L","R"]
+            if val == 180:
                 wy, wx = -wy, -wx
-            elif val == 270:
+
+            # waypoint heading
+            wh = ("N" if wy <= 0 else "S") + ("E" if wx >= 0 else "W" )
+            
+            if (dr == "L" and val == 90) or (dr == "R" and val == 270):
                 if wh == "NE":
-                    wy, wx = abs(wx), abs(wy)
-                elif wh == "NW":
-                    wy, wx = -abs(wx), abs(wy)
-                elif wh == "SW":
                     wy, wx = -abs(wx), -abs(wy)
-                elif wh == "SE":
+                elif wh == "NW":
                     wy, wx = abs(wx), -abs(wy)
+                elif wh == "SW":
+                    wy, wx = abs(wx), abs(wy)
+                elif wh == "SE":
+                    wy, wx = -abs(wx), abs(wy)
                 else:
                     assert False, wh
-        elif dr == "R":
-            wh = heading(wy, wx)
-            if val == 90:
+
+            if (dr == "R" and val == 90) or (dr == "L" and val == 270):
                 if wh == "NE":
                     wy, wx = abs(wx), abs(wy)
                 elif wh == "NW":
@@ -119,19 +100,6 @@ def solve2(lines):
                     wy, wx = -abs(wx), -abs(wy)
                 elif wh == "SE":
                     wy, wx = abs(wx), -abs(wy)
-                else:
-                    assert False, wh
-            elif val == 180:
-                wy, wx = -wy, -wx
-            elif val == 270:
-                if wh == "NE":
-                    wy, wx = -abs(wx), -abs(wy)
-                elif wh == "NW":
-                    wy, wx = abs(wx), -abs(wy)
-                elif wh == "SW":
-                    wy, wx = abs(wx), abs(wy)
-                elif wh == "SE":
-                    wy, wx = -abs(wx), abs(wy)
                 else:
                     assert False, wh
 
