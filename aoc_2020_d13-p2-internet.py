@@ -10,7 +10,7 @@ import time
 start = datetime.now()
 lines = open('13.in').readlines()
 
-
+# https://github.com/morgoth1145/advent-of-code/blob/5866cefa1026aa6e7492780f7cf63e9668bcf10e/2020/Day%2013/solution.py
 def find_bus_cadence(a, b, start, offset):
     n = start
     while (n - offset) % a != 0:
