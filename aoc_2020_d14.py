@@ -29,7 +29,7 @@ def write1(mask, addr, val, mem):
 def write2(mask, addr, val, mem):
     addr_b = format(addr, F'036b')
     new_addr_b = ""
-    cnt_x = 0
+    xs = []
     for i in range(36):
         if mask[i] == "1":
             new_addr_b += "1"
@@ -37,19 +37,14 @@ def write2(mask, addr, val, mem):
             new_addr_b += addr_b[i]
         else:
             new_addr_b += mask[i]
-            cnt_x += 1
+            xs.append(i)
 
-    for c in range(2**cnt_x):
-        subst_cmb = format(c, F"0{cnt_x}b")
-        i = 0
-        subst_addr_b = ""
-        for a in new_addr_b:
-            if a == 'X':
-                subst_addr_b += subst_cmb[i]
-                i += 1
-            else:
-                subst_addr_b += a
-        mem[int(subst_addr_b, 2)] = val
+    for c in range(2**len(xs)):
+        subst_bits = format(c, F"0{len(xs)}b")
+        addr_bits = list(new_addr_b)
+        for indx, bit in zip(xs, list(subst_bits)):
+            addr_bits[indx] = bit
+        mem[int("".join(addr_bits), 2)] = val
 
 
 def solve(lines, p1):
