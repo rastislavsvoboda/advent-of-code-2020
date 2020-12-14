@@ -24,74 +24,56 @@ def to_bin_str(val, d=36):
 
 def write1(mask, addr, val, mem):
     val_b = to_bin_str(val)
-    v = ""
-    x = 0
+    new_val_b = ""
     for i in range(36):
         if mask[i] == "1":
-            v += "1"
-            x += 2**(35 - i)
+            new_val_b += "1"
         elif mask[i] == "0":
-            v += "0"
+            new_val_b += "0"
         else:
-            v += val_b[i]
-            if val_b[i] == "1":
-                x += 2**(35 - i)
-
-    res_val = int(v, 2)
-    assert res_val == x
-    mem[int(addr)] = res_val
+            new_val_b += val_b[i]
+    new_val_d = int(new_val_b, 2)
+    mem[int(addr)] = new_val_d
 
 
 def get_cmb(x):
-    L = []
+    cmbs = []
     for i in range(2**x):
-        L.append(to_bin_str(str(i), x))
-    return L
+        cmbs.append(to_bin_str(str(i), x))
+    return cmbs
 
 
 def write2(mask, addr, val, mem):
     addr_b = to_bin_str(addr)
-    a = ""
-    # x = 0
+    new_addr_b = ""
     cnt_x = 0
     for i in range(36):
         if mask[i] == "1":
-            a += "1"
-            # x += 2**(35-i)
+            new_addr_b += "1"
         elif mask[i] == "0":
-            # v += "0"
-            a += addr_b[i]
+            new_addr_b += addr_b[i]
         else:
-            a += mask[i]
-            # v += val_b[i]
-            # if val_b[i] == "1":
-            #     x += 2**(35-i)
+            new_addr_b += mask[i]
             cnt_x += 1
 
+    val = int(val)
     addrs = []
     cmbs = get_cmb(cnt_x)
-    for c in cmbs:
+    for cmb in cmbs:
         ci = 0
-        ax = ""
-        for ai in a:
+        subst_addr_b = ""
+        for ai in new_addr_b:
             if ai == 'X':
-                ax += c[ci]
+                subst_addr_b += cmb[ci]
                 ci += 1
             else:
-                ax += ai
-        addrs.append(ax)
-
-    val = int(val)
-
-    for aa in addrs:
-        mem[int(aa, 2)] = val
+                subst_addr_b += ai
+        mem[int(subst_addr_b,2)] = val
 
 
 def solve(lines, p1):
     M = {}
     res = 0
-    cnt = 0
-    cnt_v = 0
     mask = ""
     for line in lines:
         line = line.strip()
