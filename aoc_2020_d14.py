@@ -40,12 +40,12 @@ def write2(mask, addr, val, mem):
             cnt_x += 1
 
     for c in range(2**cnt_x):
-        subst_val = format(c, F"0{cnt_x}b")
+        subst_cmb = format(c, F"0{cnt_x}b")
         i = 0
         subst_addr_b = ""
         for a in new_addr_b:
             if a == 'X':
-                subst_addr_b += subst_val[i]
+                subst_addr_b += subst_cmb[i]
                 i += 1
             else:
                 subst_addr_b += a
