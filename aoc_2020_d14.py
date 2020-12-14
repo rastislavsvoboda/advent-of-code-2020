@@ -23,7 +23,7 @@ def write1(mask, addr, val, mem):
         else:
             new_val_b += val_b[i]
     new_val_d = int(new_val_b, 2)
-    mem[int(addr)] = new_val_d
+    mem[addr] = new_val_d
 
 
 def write2(mask, addr, val, mem):
@@ -44,14 +44,14 @@ def write2(mask, addr, val, mem):
         addr_bits = list(new_addr_b)
         for i, x in enumerate(xs):
             addr_bits[x] = subst_bits[i]
-        mem[int("".join(addr_bits), 2)] = val
+        addr_d = int("".join(addr_bits), 2)
+        mem[addr_d] = val
 
 
 def solve(lines, p1):
     MEM = {}
     mask = ""
     for line in lines:
-        line = line.strip()
         words = line.split()
         if words[0] == "mask":
             mask = words[2]
