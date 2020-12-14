@@ -13,17 +13,16 @@ lines = open('13.in').readlines()
 # https://github.com/morgoth1145/advent-of-code/blob/5866cefa1026aa6e7492780f7cf63e9668bcf10e/2020/Day%2013/solution.py
 def find_bus_cadence(a, b, start, offset):
     n = start
-    while (n - offset) % a != 0:
+    while (n + offset) % a != 0:
         n += b
     m = n + b
-    while (m - offset) % a != 0:
+    while (m + offset) % a != 0:
         m += b
     return n, m - n
 
 
 def solve2(lines):
-    _, busses = lines[0], lines[1]
-    busses = [int(b) if b != 'x' else None for b in busses.split(',')][::-1]
+    busses = [int(b) if b != 'x' else None for b in lines[1].split(',')]
     offset = 0
     cadence = busses[0]
     answer = busses[0]
@@ -32,7 +31,6 @@ def solve2(lines):
         if b is None:
             continue
         answer, cadence = find_bus_cadence(b, cadence, answer, offset)
-    answer -= offset
     return answer
 
 
