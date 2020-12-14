@@ -48,14 +48,14 @@ def write2(mask, addr, val, mem):
 
     val = int(val)
     for cmb in get_cmb(cnt_x):
-        ci = 0
+        i = 0
         subst_addr_b = ""
-        for ai in new_addr_b:
-            if ai == 'X':
-                subst_addr_b += cmb[ci]
-                ci += 1
+        for a in new_addr_b:
+            if a == 'X':
+                subst_addr_b += cmb[i]
+                i += 1
             else:
-                subst_addr_b += ai
+                subst_addr_b += a
         mem[int(subst_addr_b, 2)] = val
 
 
