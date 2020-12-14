@@ -12,18 +12,8 @@ start = datetime.now()
 lines = open('14.in').readlines()
 
 
-def to_bin_str(val, d=36):
-    bin_str = str(bin(int(val, 10)))[2:]  # starts with 0b
-    # if does always start with 1, so some zeros can be missing
-    l = len(bin_str)
-    if l < d:
-        padding = d - l
-        bin_str = (padding * '0') + bin_str
-    return bin_str
-
-
 def write1(mask, addr, val, mem):
-    val_b = to_bin_str(val)
+    val_b = format(int(val), F'036b')
     new_val_b = ""
     for i in range(36):
         if mask[i] == "1":
@@ -39,12 +29,12 @@ def write1(mask, addr, val, mem):
 def get_cmb(x):
     cmbs = []
     for i in range(2**x):
-        cmbs.append(to_bin_str(str(i), x))
+        cmbs.append(format(i, F"0{x}b"))
     return cmbs
 
 
 def write2(mask, addr, val, mem):
-    addr_b = to_bin_str(addr)
+    addr_b = format(int(addr), F'036b')
     new_addr_b = ""
     cnt_x = 0
     for i in range(36):
@@ -57,9 +47,7 @@ def write2(mask, addr, val, mem):
             cnt_x += 1
 
     val = int(val)
-    addrs = []
-    cmbs = get_cmb(cnt_x)
-    for cmb in cmbs:
+    for cmb in get_cmb(cnt_x):
         ci = 0
         subst_addr_b = ""
         for ai in new_addr_b:
@@ -68,12 +56,11 @@ def write2(mask, addr, val, mem):
                 ci += 1
             else:
                 subst_addr_b += ai
-        mem[int(subst_addr_b,2)] = val
+        mem[int(subst_addr_b, 2)] = val
 
 
 def solve(lines, p1):
     M = {}
-    res = 0
     mask = ""
     for line in lines:
         line = line.strip()
@@ -87,9 +74,7 @@ def solve(lines, p1):
                 write1(mask, nums[0], nums[1], M)
             else:
                 write2(mask, nums[0], nums[1], M)
-
-    res = sum(M.values())
-    return res
+    return sum(M.values())
 
 
 print(solve(lines, True))  # 14722016054794
