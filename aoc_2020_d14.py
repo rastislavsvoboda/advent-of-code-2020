@@ -39,7 +39,7 @@ def write2(mask, addr, val, mem):
             new_addr_b += mask[i]
             xs.append(i)
     for c in range(2**len(xs)):
-        subst_bits = list(format(c, F"0{len(xs)}b"))
+        subst_bits = list(format(c, F"0{len(xs)}b")) if xs!=[] else []
         addr_bits = list(new_addr_b)
         for indx, bit in zip(xs, subst_bits):
             addr_bits[indx] = bit
