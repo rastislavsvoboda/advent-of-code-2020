@@ -30,13 +30,18 @@ lines = open('0.in').readlines()
 #     return entries
 
 
-def solve1l(lines):
+def solve1(lines):
     res = 0
 
     for line in lines:
         line = line.strip()
+        words = line.split()
+        nums = re.findall(r"[+-]?\d+", line)
         print(line)
-        res += 1
+        print(words)
+        print(nums)
+        
+        res += 11
 
     return res
 
