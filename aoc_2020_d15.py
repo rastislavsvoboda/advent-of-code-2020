@@ -11,120 +11,31 @@ start = datetime.now()
 lines = open('15.in').readlines()
 
 
-def get_index(nums, num):
-    res = []
-    for i, n in enumerate(nums):
-        if n == num:
-            res.append(i)
-    return res
-
-
-def solve1(lines):
-    SPOKEN = []
-    line = lines[0].strip()
-    nums = re.findall(r"\d+", line)
+def solve(lines, limit):
+    nums = [int(n) for n in lines[0].strip().split(',')]
     turn = 0
-    prev = 0
-    last = 0
-
-    dct = defaultdict(list)
-
-
-
-    INDXS = {}
-
-    for i, n in enumerate(nums):
-        n = int(n)
+    history = defaultdict(list)
+    for n in nums:
         turn += 1
-        # SPOKEN.append(int(n))
-        INDXS[n] = [turn]
-        last = n
-
-    while turn < 2020:
-        # last = SPOKEN[-1]
-
-        if last in INDXS:
-            indx = INDXS[last]
+        history[n].append(turn)
+    last_num = nums[-1]
+    while turn < limit:
+        prev_turns = history[last_num]
+        next_num = 0
+        if len(prev_turns) <= 1:
+            # first time spoken
+            next_num = 0
         else:
-            indx = []
-
-        if len(indx) < 2:
-            #not in
-            prev = 0
-        else:
-            prev = turn - (indx[-2])
-
-        # SPOKEN.append(prev)
+            # age
+            next_num = turn - prev_turns[-2]
         turn += 1
-        if prev in INDXS:
-            # INDXS[prev].append(turn)
-            INDXS[prev] = INDXS[prev][-1:] + [turn]
-
-        else:
-            INDXS[prev]=[turn]
-
-        last=prev
-        if (turn % 100000) == 0:
-            print(turn)
-
-    # print(SPOKEN)
-    # res = SPOKEN[-1]
-
-    return last
+        history[next_num].append(turn)
+        last_num = next_num
+    return last_num
 
 
-def solve2(lines):
-    SPOKEN = []
-    line = lines[0].strip()
-    nums = re.findall(r"\d+", line)
-    turn = 0
-    prev = 0
-    last = 0
-
-    dct = defaultdict(list)
-
-
-
-    INDXS = {}
-
-    for i, n in enumerate(nums):
-        n = int(n)
-        turn += 1
-        # SPOKEN.append(int(n))
-        INDXS[n] = [turn]
-        last = n
-
-    while turn < 30000000:
-        # last = SPOKEN[-1]
-
-        if last in INDXS:
-            indx = INDXS[last]
-        else:
-            indx = []
-
-        if len(indx) < 2:
-            #not in
-            prev = 0
-        else:
-            prev = turn - (indx[-2])
-
-        # SPOKEN.append(prev)
-        turn += 1
-        if prev in INDXS:
-            # INDXS[prev].append(turn)
-            INDXS[prev] = INDXS[prev][-1:] + [turn]
-
-        else:
-            INDXS[prev]=[turn]
-
-        last=prev
-        # if (turn % 10000000) == 0:
-        #     print(turn)
-    return last
-
-
-print(solve1(lines))  # 273
-print(solve2(lines))  # 47205
+print(solve(lines, 2020))  # 273
+print(solve(lines, 30000000))  # 47205
 
 stop = datetime.now()
 print("duration:", stop - start)
