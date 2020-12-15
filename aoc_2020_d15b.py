@@ -20,9 +20,9 @@ def solve(lines, limit):
         history[n] = turn
     last_num = nums[-1]
     while True:
+        prev_turn = history.get(last_num, -1)
         turn += 1
         history[last_num] = turn
-        prev_turn = history.get(last_num, -1)
         if prev_turn == -1:
             next_num = 0  # first time spoken
         else:
