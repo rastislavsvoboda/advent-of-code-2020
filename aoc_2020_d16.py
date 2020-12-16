@@ -1,5 +1,6 @@
 from datetime import datetime
 from datetime import timedelta
+import functools
 import copy
 import re
 import time
@@ -53,7 +54,7 @@ def valid_sum(rules, ticket):
         is_valid = False
         for k, (min1, max1, min2, max2) in rules.items():
             if min1 <= n <= max1 or min2 <= n <= max2:
-                # if at least num if in defined intervals, ticket is valid
+                # if at least num is in defined intervals, ticket is valid
                 is_valid = True
                 break
         if not is_valid:
@@ -77,7 +78,7 @@ def solve1(text):
 def possible_assign(rules, ticket):
     res = []
     for n in ticket:
-        # compute all rules names that n is in defined ranges
+        # collect all rule names that n is in defined ranges
         possible = set()
         for name, (min1, max1, min2, max2) in rules.items():
             if min1 <= n <= max1 or min2 <= n <= max2:
@@ -87,46 +88,29 @@ def possible_assign(rules, ticket):
 
 
 def get_assignments(rules, nearby_tickets):
-    possible_assignments = []
+    possible_assignments = [set(rules.keys()) for _ in range(len(rules))]
     for t in nearby_tickets:
-        validity_sum = valid_sum(rules, t)
-        if validity_sum == 0:
-            # valid
-            possible_assignments.append(possible_assign(rules, t))
+        if valid_sum(rules, t) != 0:
+            continue # skip invalid
+        poss_assign = possible_assign(rules, t)
+        for i in range(len(rules)):
+            possible_assignments[i] &= poss_assign[i] # intersect
 
-    intersected_results = []
-    for i in range(len(rules)):
-        possibilities = set(rules.keys())
-        for poss in possible_assignments:
-            possibilities = possibilities.intersection(poss[i])
-        intersected_results.append(possibilities)
-
-    # find final assignments for columns
-    # iteratively remove when there is just one possibility
+    # find final assignments: iteratively remove when there is just one possibility
     final_assignments = {}
     while len(final_assignments) < len(rules):
-        matched = None
-        for i, poss in enumerate(intersected_results):
-            if len(poss) == 1:
+        for i, poss_assign in enumerate(possible_assignments):
+            if len(poss_assign) == 1:
                 # just 1 possiblity, so this is final
-                matched = poss.pop()
+                matched = poss_assign.pop()
+                assert matched not in final_assignments
                 final_assignments[matched] = i
+                # remove matched from others
+                for pa in possible_assignments:
+                    if matched in pa:
+                        pa.remove(matched)
                 break
-        if matched:
-            # remove matched from others
-            for poss in intersected_results:
-                if matched in poss:
-                    poss.remove(matched)
     return final_assignments
-
-
-def compute_result(your_ticket, final_assignments):
-    # multiple all values for 'departure *' values
-    res = 1
-    for k, v in final_assignments.items():
-        if k.startswith("departure"):
-            res *= your_ticket[v]
-    return res
 
 
 def solve2(text):
@@ -135,10 +119,11 @@ def solve2(text):
     rules = parse_rules(data[0])
     your_ticket = parse_your_ticket(data[1])
     nearby_tickets = parse_nearby_tickets(data[2])
-
     assignments = get_assignments(rules, nearby_tickets)
-    res = compute_result(your_ticket, assignments)
-
+    res = 1
+    for k, v in assignments.items():
+        if k.startswith("departure"):
+            res *= your_ticket[v]
     return res
 
 
