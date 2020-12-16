@@ -62,6 +62,18 @@ def valid_sum(rules, ticket):
     return s
 
 
+def solve1(text):
+    res = 0
+    data = get_data(text)
+    # print(data)
+    rules = parse_rules(data[0])
+    your_ticket = parse_your_ticket(data[1])
+    nearby_tickers = parse_nearby_tickets(data[2])
+    for t in nearby_tickers:
+        res += valid_sum(rules, t)
+    return res
+
+
 def possible_assign(rules, ticket):
     res = []
     for n in ticket:
@@ -74,30 +86,26 @@ def possible_assign(rules, ticket):
     return res
 
 
-def solve(text):
-    data = get_data(text)
-    # print(data)
-    rules = parse_rules(data[0])
-    your_ticket = parse_your_ticket(data[1])
-    nearby_tickers = parse_nearby_tickets(data[2])
-
-    res1 = 0
-    # get possible assignments for valid tickets
+def get_possible_assignments(rules, nearby_tickets):
     possible_assignments = []
-    for t in nearby_tickers:
+    for t in nearby_tickets:
         validity_sum = valid_sum(rules, t)
-        res1 += validity_sum
         if validity_sum == 0:
             possible_assignments.append(possible_assign(rules, t))
+    return possible_assignments
 
-    # intersect possible results for per column
+
+def get_intersected_results(rules, possible_assignments):
     intersected_results = []
     for i in range(len(rules)):
         possibilities = set(rules.keys())
         for poss in possible_assignments:
             possibilities = possibilities.intersection(poss[i])
         intersected_results.append(possibilities)
+    return intersected_results
 
+
+def get_final_assignments(rules, intersected_results):
     # find final assignments for columns
     # iteratively remove when there is just one possibility
     final_assignments = {}
@@ -114,17 +122,35 @@ def solve(text):
             for poss in intersected_results:
                 if matched in poss:
                     poss.remove(matched)
+    return final_assignments
 
+
+def compute_result(your_ticket, final_assignments):
     # multiple all values for 'departure *' values
-    res2 = 1
+    res = 1
     for k, v in final_assignments.items():
         if k.startswith("departure"):
-            res2 *= your_ticket[v]        
+            res *= your_ticket[v]
+    return res
 
-    return res1, res2
+
+def solve2(text):
+    data = get_data(text)
+    # print(data)
+    rules = parse_rules(data[0])
+    your_ticket = parse_your_ticket(data[1])
+    nearby_tickets = parse_nearby_tickets(data[2])
+
+    possible_assignments = get_possible_assignments(rules, nearby_tickets)
+    intersected_results = get_intersected_results(rules, possible_assignments)
+    final_assignments = get_final_assignments(rules, intersected_results)
+    res = compute_result(your_ticket, final_assignments)
+
+    return res
 
 
-print(solve(text)) # 26980, 3021381607403
+print(solve1(text))  # 26980
+print(solve2(text))  # 3021381607403
 
 stop = datetime.now()
 print("duration:", stop - start)
