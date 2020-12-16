@@ -86,26 +86,21 @@ def possible_assign(rules, ticket):
     return res
 
 
-def get_possible_assignments(rules, nearby_tickets):
+def get_assignments(rules, nearby_tickets):
     possible_assignments = []
     for t in nearby_tickets:
         validity_sum = valid_sum(rules, t)
         if validity_sum == 0:
+            # valid
             possible_assignments.append(possible_assign(rules, t))
-    return possible_assignments
 
-
-def get_intersected_results(rules, possible_assignments):
     intersected_results = []
     for i in range(len(rules)):
         possibilities = set(rules.keys())
         for poss in possible_assignments:
             possibilities = possibilities.intersection(poss[i])
         intersected_results.append(possibilities)
-    return intersected_results
 
-
-def get_final_assignments(rules, intersected_results):
     # find final assignments for columns
     # iteratively remove when there is just one possibility
     final_assignments = {}
@@ -141,10 +136,8 @@ def solve2(text):
     your_ticket = parse_your_ticket(data[1])
     nearby_tickets = parse_nearby_tickets(data[2])
 
-    possible_assignments = get_possible_assignments(rules, nearby_tickets)
-    intersected_results = get_intersected_results(rules, possible_assignments)
-    final_assignments = get_final_assignments(rules, intersected_results)
-    res = compute_result(your_ticket, final_assignments)
+    assignments = get_assignments(rules, nearby_tickets)
+    res = compute_result(your_ticket, assignments)
 
     return res
 
