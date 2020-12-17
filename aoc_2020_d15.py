@@ -21,7 +21,6 @@ def solve(lines, limit):
     last_num = nums[-1]
     while turn < limit:
         prev_turns = history[last_num]
-        next_num = 0
         if len(prev_turns) <= 1:
             # first time spoken
             next_num = 0
