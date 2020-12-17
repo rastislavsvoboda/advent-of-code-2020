@@ -11,6 +11,10 @@ start = datetime.now()
 lines = open('17.in').readlines()
 
 
+def range_for(idx, set_):
+    return range(min(p[idx] for p in set_) - 1, max(p[idx] for p in set_) + 2)
+
+
 def adj1(M, p):
     (x, y, z) = p
     cnt = 0
@@ -30,15 +34,15 @@ def evolve1(M, sizeX, sizeY, sizeZ):
     sizeX += 1
     sizeY += 1
     sizeZ += 1
-    for z in range(-sizeZ, sizeZ + 1):
-        for y in range(-sizeY, sizeY + 1):
-            for x in range(-sizeX, sizeX + 1):
+    for z in range_for(2, M):
+        for y in range_for(1, M):
+            for x in range_for(0, M):
                 p = (x, y, z)
                 alive = p in M
                 cnt = adj1(M, p)
                 if alive and cnt in [2, 3]:
                     newM.add(p)
-                if not alive and cnt == 3:
+                elif not alive and cnt == 3:
                     newM.add(p)
     return newM, sizeX, sizeY, sizeZ
 
@@ -64,31 +68,18 @@ def evolve2(M, sizeX, sizeY, sizeZ, sizeW):
     sizeY += 1
     sizeZ += 1
     sizeW += 1
-    for w in range(-sizeW, sizeW + 1):
-        for z in range(-sizeZ, sizeZ + 1):
-            for y in range(-sizeY, sizeY + 1):
-                for x in range(-sizeX, sizeX + 1):
+    for w in range_for(3, M):
+        for z in range_for(2, M):
+            for y in range_for(1, M):
+                for x in range_for(0, M):
                     p = (x, y, z, w)
                     alive = p in M
                     cnt = adj2(M, p)
                     if alive and cnt in [2, 3]:
                         newM.add(p)
-                    if not alive and cnt == 3:
+                    elif not alive and cnt == 3:
                         newM.add(p)
     return newM, sizeX, sizeY, sizeZ, sizeW
-
-
-def printM1(M, sizeX, sizeY, sizeZ):
-    for z in range(-sizeZ, sizeZ + 1):
-        print(F"z={z}")
-        for y in range(-sizeY, sizeY + 1):
-            l = ""
-            for x in range(-sizeX, sizeX + 1):
-                cube = M.get((x, y, z), '.')
-                l += cube
-            print(l)
-        print()
-    print()
 
 
 def solve1(lines):
@@ -101,15 +92,11 @@ def solve1(lines):
         for x, c in enumerate(list(line.strip())):
             if c == "#":
                 M.add((x - sizeX, y - sizeY, 0))
-    # printM1(M, sizeX, sizeY, sizeZ)
-    # print("----------------")
 
     cycle = 0
     while cycle < 6:
         M, sizeX, sizeY, sizeZ = evolve1(M, sizeX, sizeY, sizeZ)
         cycle += 1
-        # printM1(M, sizeX, sizeY, sizeZ)
-        # print("----------------")
 
     return len(M)
 
