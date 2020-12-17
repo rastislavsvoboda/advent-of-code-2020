@@ -69,16 +69,6 @@ def solve2(lines):
     return res
 
 
-# def solve2b(lines):
-#     res = 0
-#     seat_ids = sorted(get_seat_ids(lines))
-#     for i in range(seat_ids[0], seat_ids[-1] + 1):
-#         if i not in seat_ids:
-#             res = i
-#             break
-#     return res
-
-
 print(solve1(lines))  # 896
 print(solve2(lines))  # 659
 
