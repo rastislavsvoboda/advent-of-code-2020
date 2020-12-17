@@ -29,11 +29,8 @@ def adj1(M, p):
     return cnt
 
 
-def evolve1(M, sizeX, sizeY, sizeZ):
+def evolve1(M):
     newM = set()
-    sizeX += 1
-    sizeY += 1
-    sizeZ += 1
     for z in range_for(2, M):
         for y in range_for(1, M):
             for x in range_for(0, M):
@@ -44,7 +41,7 @@ def evolve1(M, sizeX, sizeY, sizeZ):
                     newM.add(p)
                 elif not alive and cnt == 3:
                     newM.add(p)
-    return newM, sizeX, sizeY, sizeZ
+    return newM
 
 
 def adj2(M, p):
@@ -62,12 +59,8 @@ def adj2(M, p):
     return cnt
 
 
-def evolve2(M, sizeX, sizeY, sizeZ, sizeW):
+def evolve2(M):
     newM = set()
-    sizeX += 1
-    sizeY += 1
-    sizeZ += 1
-    sizeW += 1
     for w in range_for(3, M):
         for z in range_for(2, M):
             for y in range_for(1, M):
@@ -79,14 +72,13 @@ def evolve2(M, sizeX, sizeY, sizeZ, sizeW):
                         newM.add(p)
                     elif not alive and cnt == 3:
                         newM.add(p)
-    return newM, sizeX, sizeY, sizeZ, sizeW
+    return newM
 
 
 def solve1(lines):
     M = set()
     sizeX = len(lines[0]) // 2
     sizeY = len(lines) // 2
-    sizeZ = 0
 
     for y, line in enumerate(lines):
         for x, c in enumerate(list(line.strip())):
@@ -95,7 +87,7 @@ def solve1(lines):
 
     cycle = 0
     while cycle < 6:
-        M, sizeX, sizeY, sizeZ = evolve1(M, sizeX, sizeY, sizeZ)
+        M = evolve1(M)
         cycle += 1
 
     return len(M)
@@ -105,8 +97,6 @@ def solve2(lines):
     M = set()
     sizeX = len(lines[0]) // 2
     sizeY = len(lines) // 2
-    sizeZ = 0
-    sizeW = 0
 
     for y, line in enumerate(lines):
         for x, c in enumerate(list(line.strip())):
@@ -115,7 +105,7 @@ def solve2(lines):
 
     cycle = 0
     while cycle < 6:
-        M, sizeX, sizeY, sizeZ, sizeW = evolve2(M, sizeX, sizeY, sizeZ, sizeW)
+        M = evolve2(M)
         cycle += 1
 
     return len(M)
