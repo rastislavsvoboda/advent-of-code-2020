@@ -19,8 +19,8 @@ def adj1(M, x, y, z):
             for dz in offsets:
                 if dx == dy == dz == 0:
                     continue
-                p = (x + dx, y + dy, z + dz)
-                if p in M and M[p] == "#":
+                cube = M.get((x + dx, y + dy, z + dz), '.')
+                if cube == "#":
                     cnt += 1
     return cnt
 
@@ -31,10 +31,7 @@ def evolve1(M, size):
     for z in range(-size, size + 1):
         for y in range(-size, size + 1):
             for x in range(-size, size + 1):
-                if (x, y, z) not in M:
-                    cube = '.'
-                else:
-                    cube = M[(x, y, z)]
+                cube = M.get((x, y, z), '.')
                 cnt = adj1(M, x, y, z)
                 if cube == "#" and cnt not in [2, 3]:
                     newM[(x, y, z)] = "."
@@ -52,8 +49,8 @@ def adj2(M, x, y, z, w):
                 for dw in offsets:
                     if dx == dy == dz == dw == 0:
                         continue
-                    p = (x + dx, y + dy, z + dz, w + dw)
-                    if p in M and M[p] == "#":
+                    cube = M.get((x + dx, y + dy, z + dz, w + dw), '.')
+                    if cube == "#":
                         cnt += 1
     return cnt
 
@@ -65,10 +62,7 @@ def evolve2(M, size):
         for z in range(-size, size + 1):
             for y in range(-size, size + 1):
                 for x in range(-size, size + 1):
-                    if (x, y, z, w) not in M:
-                        cube = '.'
-                    else:
-                        cube = M[(x, y, z, w)]
+                    cube = M.get((x, y, z, w), '.')
                     cnt = adj2(M, x, y, z, w)
                     if cube == "#" and cnt not in [2, 3]:
                         newM[(x, y, z, w)] = "."
@@ -91,10 +85,7 @@ def printM1(M, size):
         for y in range(-size, size + 1):
             l = ""
             for x in range(-size, size + 1):
-                if (x, y, z) in M:
-                    cube = M[(x, y, z)]
-                else:
-                    cube = '.'
+                cube = M.get((x, y, z), '.')
                 l += cube
             print(l)
         print()
