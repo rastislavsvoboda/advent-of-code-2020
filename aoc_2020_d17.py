@@ -13,14 +13,15 @@ lines = open('17.in').readlines()
 
 def adj1(M, x, y, z):
     cnt = 0
-    for dx in [-1, 0, 1]:
-        for dy in [-1, 0, 1]:
-            for dz in [-1, 0, 1]:
+    offsets = [-1, 0, 1]
+    for dx in offsets:
+        for dy in offsets:
+            for dz in offsets:
                 if dx == dy == dz == 0:
                     continue
-                if (x + dx, y + dy, z + dz) in M:
-                    if M[(x + dx, y + dy, z + dz)] == "#":
-                        cnt += 1
+                p = (x + dx, y + dy, z + dz)
+                if p in M and M[p] == "#":
+                    cnt += 1
     return cnt
 
 
@@ -46,15 +47,16 @@ def evolve1(M, sizeX, sizeY, sizeZ):
 
 def adj2(M, x, y, z, w):
     cnt = 0
-    for dx in [-1, 0, 1]:
-        for dy in [-1, 0, 1]:
-            for dz in [-1, 0, 1]:
-                for dw in [-1, 0, 1]:
+    offsets = [-1, 0, 1]
+    for dx in offsets:
+        for dy in offsets:
+            for dz in offsets:
+                for dw in offsets:
                     if dx == dy == dz == dw == 0:
                         continue
-                    if (x + dx, y + dy, z + dz, w + dw) in M:
-                        if M[(x + dx, y + dy, z + dz, w + dw)] == "#":
-                            cnt += 1
+                    p = (x + dx, y + dy, z + dz, w + dw)
+                    if p in M and M[p] == "#":
+                        cnt += 1
     return cnt
 
 
@@ -106,9 +108,10 @@ def printM1(M, sizeX, sizeY, sizeZ):
 
 def solve1(lines):
     M = {}
-    sizeX = 4
-    sizeY = 4
-    sizeZ = 4
+    l = len(lines) // 2
+    sizeX = l
+    sizeY = l
+    sizeZ = l
 
     for z in range(-sizeZ, sizeZ + 1):
         for y in range(-sizeY, sizeY + 1):
@@ -135,10 +138,11 @@ def solve1(lines):
 
 def solve2(lines):
     M = {}
-    sizeX = 4
-    sizeY = 4
-    sizeZ = 4
-    sizeW = 4
+    l = len(lines) // 2
+    sizeX = l
+    sizeY = l
+    sizeZ = l
+    sizeW = l
 
     for w in range(-sizeW, sizeW + 1):
         for z in range(-sizeZ, sizeZ + 1):
