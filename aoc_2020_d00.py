@@ -41,7 +41,7 @@ def solve1(lines):
         print(words)
         print(nums)
         
-        res += 11
+        res += 1
 
     return res
 
