@@ -25,19 +25,21 @@ def adj1(M, x, y, z):
     return cnt
 
 
-def evolve1(M, size):
+def evolve1(M, sizeX, sizeY, sizeZ):
     newM = copy.deepcopy(M)
-    size += 1
-    for z in range(-size, size + 1):
-        for y in range(-size, size + 1):
-            for x in range(-size, size + 1):
+    sizeX += 1
+    sizeY += 1
+    sizeZ += 1
+    for z in range(-sizeZ, sizeZ + 1):
+        for y in range(-sizeY, sizeY + 1):
+            for x in range(-sizeX, sizeX + 1):
                 cube = M.get((x, y, z), '.')
                 cnt = adj1(M, x, y, z)
                 if cube == "#" and cnt not in [2, 3]:
                     newM[(x, y, z)] = "."
                 elif cube == '.' and cnt == 3:
                     newM[(x, y, z)] = "#"
-    return newM, size
+    return newM, sizeX, sizeY, sizeZ
 
 
 def adj2(M, x, y, z, w):
@@ -49,26 +51,30 @@ def adj2(M, x, y, z, w):
                 for dw in offsets:
                     if dx == dy == dz == dw == 0:
                         continue
-                    cube = M.get((x + dx, y + dy, z + dz, w + dw), '.')
+                    p = (x + dx, y + dy, z + dz, w + dw)
+                    cube = M.get(p, '.')
                     if cube == "#":
                         cnt += 1
     return cnt
 
 
-def evolve2(M, size):
+def evolve2(M, sizeX, sizeY, sizeZ, sizeW):
     newM = copy.deepcopy(M)
-    size += 1
-    for w in range(-size, size + 1):
-        for z in range(-size, size + 1):
-            for y in range(-size, size + 1):
-                for x in range(-size, size + 1):
+    sizeX += 1
+    sizeY += 1
+    sizeZ += 1
+    sizeW += 1
+    for w in range(-sizeW, sizeW + 1):
+        for z in range(-sizeZ, sizeZ + 1):
+            for y in range(-sizeY, sizeY + 1):
+                for x in range(-sizeX, sizeX + 1):
                     cube = M.get((x, y, z, w), '.')
                     cnt = adj2(M, x, y, z, w)
                     if cube == "#" and cnt not in [2, 3]:
                         newM[(x, y, z, w)] = "."
                     elif cube == '.' and cnt == 3:
                         newM[(x, y, z, w)] = "#"
-    return newM, size
+    return newM, sizeX, sizeY, sizeZ, sizeW
 
 
 def count(M):
@@ -79,13 +85,13 @@ def count(M):
     return res
 
 
-def printM1(M, size):
-    for z in range(-size, size + 1):
+def printM1(M, sizeX, sizeY, sizeZ):
+    for z in range(-sizeZ, sizeZ + 1):
         print(F"z={z}")
-        for y in range(-size, size + 1):
+        for y in range(-sizeY, sizeY + 1):
             l = ""
-            for x in range(-size, size + 1):
-                cube = M.get((x, y, z), '.')
+            for x in range(-sizeX, sizeX + 1):
+                cube = M.get((x, y, z),'.')
                 l += cube
             print(l)
         print()
@@ -94,26 +100,27 @@ def printM1(M, size):
 
 def solve1(lines):
     M = {}
-    l = len(lines) // 2
-    size = l
+    sizeX = len(lines[0]) // 2
+    sizeY = len(lines) // 2
+    sizeZ = 0
 
-    for z in range(-size, size + 1):
-        for y in range(-size, size + 1):
-            for x in range(-size, size + 1):
+    for z in range(-sizeZ, sizeZ + 1):
+        for y in range(-sizeY, sizeY + 1):
+            for x in range(-sizeX, sizeX + 1):
                 M[(x, y, z)] = '.'
 
     z = 0
     for y, line in enumerate(lines):
         for x, c in enumerate(list(line.strip())):
-            M[(x - size, y - size, z)] = c
-    # printM1(M, size)
+            M[(x - sizeX, y - sizeY, z)] = c
+    # printM1(M, sizeX, sizeY, sizeZ)
     # print("----------------")
 
     cycle = 0
     while cycle < 6:
-        M, size = evolve1(M, size)
+        M, sizeX, sizeY, sizeZ = evolve1(M, sizeX, sizeY, sizeZ)
         cycle += 1
-        # printM1(M, size)
+        # printM1(M, sizeX, sizeY, sizeZ)
         # print("----------------")
 
     res = count(M)
@@ -122,24 +129,26 @@ def solve1(lines):
 
 def solve2(lines):
     M = {}
-    l = len(lines) // 2
-    size = l
+    sizeX = len(lines[0]) // 2
+    sizeY = len(lines) // 2
+    sizeZ = 0
+    sizeW = 0
 
-    for w in range(-size, size + 1):
-        for z in range(-size, size + 1):
-            for y in range(-size, size + 1):
-                for x in range(-size, size + 1):
+    for w in range(-sizeW, sizeW + 1):
+        for z in range(-sizeZ, sizeZ + 1):
+            for y in range(-sizeY, sizeY + 1):
+                for x in range(-sizeX, sizeX + 1):
                     M[(x, y, z, w)] = '.'
 
     w = 0
     z = 0
     for y, line in enumerate(lines):
         for x, c in enumerate(list(line.strip())):
-            M[(x - size, y - size, z, w)] = c
+            M[(x - sizeX, y - sizeY, z, w)] = c
 
     cycle = 0
     while cycle < 6:
-        M, size = evolve2(M, size)
+        M, sizeX, sizeY, sizeZ, sizeW = evolve2(M, sizeX, sizeY, sizeZ, sizeW)
         cycle += 1
 
     res = count(M)
