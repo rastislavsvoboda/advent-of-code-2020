@@ -30,8 +30,6 @@ def rec_eval(indx, line, p1):
             indx += 1
         elif c == ' ':
             indx += 1
-        else:
-            assert False, F"wrong char:{c}"
     # evaluate
     while len(q) >= 3:
         n1 = q.popleft()
@@ -65,17 +63,11 @@ def rec_eval(indx, line, p1):
     return res, indx
 
 
-def evaluate(line, p1):
-    line = "(" + line + ")"
-    res, indx = rec_eval(0, line, p1)
-    assert indx == len(line), "should went through whole line"
-    return res
-
-
 def solve(lines, p1):
     res = 0
     for line in lines:
-        x = evaluate(line.strip(), p1)
+        line = "(" + line.strip() + ")"
+        x, _ = rec_eval(0, line, p1)
         # print(x)
         res += x
     return res
