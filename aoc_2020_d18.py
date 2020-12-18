@@ -41,8 +41,7 @@ def eval_queue(q, p1):
 
 
 def rec_eval(acc, indx, line, p1):
-    s = ""
-    n = 0
+    num = ""
     q = deque()
     while indx < len(line):
         c = line[indx]
@@ -51,14 +50,13 @@ def rec_eval(acc, indx, line, p1):
             q.append(sub_eval)
         elif c == ")" or c == ' ':
             indx += 1
-            if s != "":
-                n = int(s)
-                q.append(n)
-                s = ""
+            if num != "":
+                q.append(int(num))
+                num = ""
             if c == ")":
                 break
         elif str.isdigit(c):
-            s += c
+            num += c
             indx += 1
         elif c == '+' or c == '*':
             q.append(c)
@@ -71,7 +69,7 @@ def rec_eval(acc, indx, line, p1):
     return res, indx
 
 
-def evaluate(i, line, p1):
+def evaluate(line, p1):
     line = "(" + line + ")"
     res, indx = rec_eval(0, 0, line, p1)
     assert indx == len(line), "should went through whole line"
@@ -82,7 +80,7 @@ def solve(lines, p1):
     res = 0
     for line in lines:
         line = line.strip()
-        x = evaluate(0, line, p1)
+        x = evaluate(line, p1)
         # print(x)
         res += x
     return res
