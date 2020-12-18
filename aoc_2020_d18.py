@@ -40,13 +40,13 @@ def eval_queue(q, p1):
             assert False, F"wrong op:{op}"
 
 
-def rec_eval(acc, indx, line, p1):
+def rec_eval(indx, line, p1):
     num = ""
     q = deque()
     while indx < len(line):
         c = line[indx]
         if c == "(":
-            sub_eval, indx = rec_eval(0, indx + 1, line, p1)
+            sub_eval, indx = rec_eval(indx + 1, line, p1)
             q.append(sub_eval)
         elif c == ")" or c == ' ':
             indx += 1
@@ -71,7 +71,7 @@ def rec_eval(acc, indx, line, p1):
 
 def evaluate(line, p1):
     line = "(" + line + ")"
-    res, indx = rec_eval(0, 0, line, p1)
+    res, indx = rec_eval(0, line, p1)
     assert indx == len(line), "should went through whole line"
     return res
 
@@ -79,8 +79,7 @@ def evaluate(line, p1):
 def solve(lines, p1):
     res = 0
     for line in lines:
-        line = line.strip()
-        x = evaluate(line, p1)
+        x = evaluate(line.strip(), p1)
         # print(x)
         res += x
     return res
