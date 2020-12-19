@@ -27,7 +27,6 @@ def parse(text):
 
 def parse_rules(text):
     rules = {}
-    head = []
     for line in text:
         line = line.strip()
         if not line:
@@ -44,10 +43,8 @@ def parse_rules(text):
         name = int(parts[0])
         if "a" in parts[1]:
             rules[name] = (TCHAR, "a")
-            head.append(name)
         elif "b" in parts[1]:
             rules[name] = (TCHAR, "b")
-            head.append(name)
         elif "|" in parts[1]:
             ored = parts[1].split('|')
             nums1 = [int(n) for n in re.findall(r'\d+', ored[0])]
