@@ -15,10 +15,11 @@ TCHAR = 1
 TLST = 2
 TOR = 3
 
+
 def parse(text):
     data = []
     for grp in text.split('\n\n'):
-        data.append(grp.split('\n'))    
+        data.append(grp.split('\n'))
     rules = parse_rules(data[0])
     messages = data[1]
     return (rules, messages)
@@ -90,7 +91,7 @@ def eval_rule(rules, r, acc):
         r2 = acc[:]
         for l in l2:
             r2 = add_list(r2, eval_rule(rules, l, acc))
-        return r1 + r2 # list concat
+        return r1 + r2  # list concat
     assert False
 
 
@@ -123,8 +124,9 @@ def solve1(data):
 
         # fast - hardcoded for rule 0: -> 8 | 11 -> 42 42 31
         if len(is_in_42) == len(is_in_31) == 3:
-            if is_in_42[0] == True and is_in_42[1] == True and is_in_31[2] == True:
-                res +=1
+            if is_in_42[0] == True and is_in_42[1] == True and is_in_31[
+                    2] == True:
+                res += 1
 
     return res
 
@@ -158,29 +160,46 @@ def solve2(data):
                 is_in_31[i] = True
             i += 1
 
-        b = 0 if is_in_42[0] else -1 # first must be 42
-        e = len(is_in_31) - 1 if is_in_31[-1] else len(is_in_31) # last must be 31
+        # b = 0 if is_in_42[0] else -1 # first must be 42
+        # e = len(is_in_31) - 1 if is_in_31[-1] else len(is_in_31) # last must be 31
 
-        while 0 <= b < len(is_in_42) and is_in_42[b]:
-            b += 1
+        # while 0 <= b < len(is_in_42) and is_in_42[b]:
+        #     b += 1
 
-        while 0 <= e < len(is_in_31) and is_in_31[e]:
-            e -= 1
+        # while 0 <= e < len(is_in_31) and is_in_31[e]:
+        #     e -= 1
 
-        if b == e + 1:
-            # begin and end should just "cross"
-            assert 0 <= b
-            assert e < len(is_in_31)
-            if b > len(is_in_42) // 2:
-                # 42 must be more times than 31
-                # because 0: 8 11
-                # because 8: 42 | 42 8
-                # because 11: 42 11 31
-                # so min possibility is 42 42 31
-                # next: 42 .... 42 42 31 31
+        # if b == e + 1:
+        #     # begin and end should just "cross"
+        #     assert 0 <= b
+        #     assert e < len(is_in_31)
+        #     if b > len(is_in_42) // 2:
+        #         # 42 must be more times than 31
+        #         # because 0: 8 11
+        #         # because 8: 42 | 42 8
+        #         # because 11: 42 11 31
+        #         # so min possibility is 42 42 31
+        #         # next: 42 .... 42 42 31 31
+        #         res += 1
+
+        # hopefully better
+        cnt42 = 0
+        cnt31 = 0
+        i = 0
+        if is_in_42[i]:
+            cnt42 += 1
+            i += 1
+            while i < len(is_in_42) and is_in_42[i]:
+                cnt42 += 1
+                i += 1
+            while i < len(is_in_31) and is_in_31[i]:
+                cnt31 += 1
+                i += 1
+            if i == len(is_in_31) and 0 < cnt31 < cnt42:
                 res += 1
 
     return res
+
 
 data = parse(text)
 print(solve1(data))  # 142
