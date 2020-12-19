@@ -13,7 +13,6 @@ text = open('19.in').read()
 
 TCHAR = 1
 TLST = 2
-TOR = 3
 
 
 def parse(text):
@@ -46,13 +45,13 @@ def parse_rules(text):
         elif "b" in parts[1]:
             rules[name] = (TCHAR, "b")
         elif "|" in parts[1]:
-            ored = parts[1].split('|')
-            nums1 = [int(n) for n in re.findall(r'\d+', ored[0])]
-            nums2 = [int(n) for n in re.findall(r'\d+', ored[1])]
-            rules[name] = (TOR, (nums1, nums2))
+            opts = parts[1].split('|')
+            nums1 = [int(n) for n in re.findall(r'\d+', opts[0])]
+            nums2 = [int(n) for n in re.findall(r'\d+', opts[1])]
+            rules[name] = (TLST, [nums1, nums2])
         else:
             nums = [int(n) for n in re.findall(r'\d+', parts[1])]
-            rules[name] = (TLST, nums)
+            rules[name] = (TLST, [nums])
     return rules
 
 
@@ -76,19 +75,13 @@ def eval_rule(rules, r, acc):
     if r_type == TCHAR:
         return add_char(acc, r_data)
     elif r_type == TLST:
-        res = acc[:]
-        for l in r_data:
-            res = add_list(res, eval_rule(rules, l, acc))
-        return res
-    elif r_type == TOR:
-        (l1, l2) = r_data
-        r1 = acc[:]
-        for l in l1:
-            r1 = add_list(r1, eval_rule(rules, l, acc))
-        r2 = acc[:]
-        for l in l2:
-            r2 = add_list(r2, eval_rule(rules, l, acc))
-        return r1 + r2  # list concat
+        total = []
+        for lsts in r_data:
+            res = acc[:]
+            for l in lsts:
+                res = add_list(res, eval_rule(rules, l, acc))
+            total += res
+        return total
     assert False
 
 
