@@ -24,6 +24,7 @@ def match_list(line, st, ed, rules):
     for i in range(st+1, ed+1):
         if match(line, st, i, rules[0]) and match_list(line, i, ed, rules[1:]):
             ret = True
+            break
 
     return ret
 
@@ -40,6 +41,7 @@ def match(line, st, ed, rule):
         for option in R[rule]:
             if match_list(line, st, ed, option):
                 ret = True
+                break
 
     DP[key] = ret
     return ret
