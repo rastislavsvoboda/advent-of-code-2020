@@ -98,11 +98,11 @@ def solve1(data):
     res = 0
     rules, messages = data
 
-    x42 = eval_rule(rules, 42, [""])
-    x31 = eval_rule(rules, 31, [""])
+    r42 = eval_rule(rules, 42, [""])
+    r31 = eval_rule(rules, 31, [""])
 
-    l42 = len(x42[0])
-    l31 = len(x31[0])
+    l42 = len(r42[0])
+    l31 = len(r31[0])
     assert l42 == l31, "length should match"
     l = l42
 
@@ -115,9 +115,9 @@ def solve1(data):
 
         i = 0
         for indx in range(0, len(m), l):
-            if m[indx:indx + l] in x42:
+            if m[indx:indx + l] in r42:
                 is_in_42[i] = True
-            if m[indx:indx + l] in x31:
+            if m[indx:indx + l] in r31:
                 is_in_31[i] = True
             i += 1
 
@@ -133,13 +133,13 @@ def solve2(data):
     res = 0
     rules, messages = data
 
-    x42 = eval_rule(rules, 42, [""])
-    # print("42: ", len(x42))
-    x31 = eval_rule(rules, 31, [""])
-    # print("31: ", len(x31))
+    r42 = eval_rule(rules, 42, [""])
+    # print("42: ", len(r42))
+    r31 = eval_rule(rules, 31, [""])
+    # print("31: ", len(r31))
 
-    l42 = len(x42[0])
-    l31 = len(x31[0])
+    l42 = len(r42[0])
+    l31 = len(r31[0])
     assert l42 == l31, "length should match"
     l = l42
 
@@ -152,34 +152,33 @@ def solve2(data):
 
         i = 0
         for indx in range(0, len(m), l):
-            if m[indx:indx + l] in x42:
+            if m[indx:indx + l] in r42:
                 is_in_42[i] = True
-            if m[indx:indx + l] in x31:
+            if m[indx:indx + l] in r31:
                 is_in_31[i] = True
             i += 1
 
-        b = 0 if is_in_42[0] else -1
-        e = len(is_in_31) - 1 if is_in_31[-1] else len(is_in_31)
+        b = 0 if is_in_42[0] else -1 # first must be 42
+        e = len(is_in_31) - 1 if is_in_31[-1] else len(is_in_31) # last must be 31
 
-        while b >= 0 and b < len(is_in_42) and is_in_42[b] == True:
+        while 0 <= b < len(is_in_42) and is_in_42[b]:
             b += 1
 
-        while e >= 0 and e < len(is_in_31) and is_in_31[e] == True:
+        while 0 <= e < len(is_in_31) and is_in_31[e]:
             e -= 1
 
         if b == e + 1:
-            # print("ok", m)
-            assert b >= 0
+            # begin and end should just "cross"
+            assert 0 <= b
             assert e < len(is_in_31)
-            # assert b>=len(is_in_42)//2, "wrong b"
             if b > len(is_in_42) // 2:
+                # 42 must be more times than 31
+                # because 0: 8 11
+                # because 8: 42 | 42 8
+                # because 11: 42 11 31
+                # so min possibility is 42 42 31
+                # next: 42 .... 42 42 31 31
                 res += 1
-                # print("b", b)
-            # else:
-            #     print(is_in_42)
-            #     print(is_in_31)
-            #     print("not ok")
-        # print("****")
 
     return res
 
