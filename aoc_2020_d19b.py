@@ -121,8 +121,7 @@ def solve1(data):
 
         # fast - hardcoded for rule 0: -> 8 | 11 -> 42 42 31
         if len(is_in_42) == len(is_in_31) == 3:
-            if is_in_42[0] == True and is_in_42[1] == True and is_in_31[
-                    2] == True:
+            if is_in_42[0] and is_in_42[1] and is_in_31[2]:
                 res += 1
 
     return res
