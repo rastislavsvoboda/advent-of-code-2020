@@ -15,12 +15,13 @@ TCHAR = 1
 TLST = 2
 TOR = 3
 
-
-def get_data(text):
+def parse(text):
     data = []
     for grp in text.split('\n\n'):
-        data.append(grp.split('\n'))
-    return data
+        data.append(grp.split('\n'))    
+    rules = parse_rules(data[0])
+    messages = data[1]
+    return (rules, messages)
 
 
 def parse_rules(text):
@@ -67,8 +68,8 @@ def add_char(acc, x):
 def add_list(acc, lst):
     res = []
     for a in acc:
-        for l in lst:
-            res.append(a + l)
+        for x in lst:
+            res.append(a + x)
     return res
 
 
@@ -82,25 +83,20 @@ def eval_rule(rules, r, acc):
             res = add_list(res, eval_rule(rules, l, acc))
         return res
     elif r_type == TOR:
-        (a, b) = r_data
+        (l1, l2) = r_data
         r1 = acc[:]
-        for l in a:
+        for l in l1:
             r1 = add_list(r1, eval_rule(rules, l, acc))
         r2 = acc[:]
-        for l in b:
+        for l in l2:
             r2 = add_list(r2, eval_rule(rules, l, acc))
-        xx = r1 + r2
-        return xx
+        return r1 + r2 # list concat
     assert False
 
 
-def solve1(text):
+def solve1(data):
     res = 0
-    data = get_data(text)
-    rules = parse_rules(data[0])
-    # print(rules)
-    messages = data[1]
-
+    rules, messages = data
     rule0_possibilities = eval_rule(rules, 0, [""])
     for msg in messages:
         if not msg:
@@ -111,11 +107,9 @@ def solve1(text):
     return res
 
 
-def solve2(text):
+def solve2(data):
     res = 0
-    data = get_data(text)
-    rules = parse_rules(data[0])
-    messages = data[1]
+    rules, messages = data
 
     x42 = eval_rule(rules, 42, [""])
     # print("42: ", len(x42))
@@ -167,9 +161,9 @@ def solve2(text):
 
     return res
 
-
-print(solve1(text))  # 142
-print(solve2(text))  # 294
+data = parse(text)
+print(solve1(data))  # 142
+print(solve2(data))  # 294
 # p2: wrong 343, 329, 313 too high
 
 stop = datetime.now()
