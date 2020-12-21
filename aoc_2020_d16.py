@@ -107,8 +107,7 @@ def get_assignments(rules, nearby_tickets):
                 final_assignments[matched] = i
                 # remove matched from others
                 for pa in possible_assignments:
-                    if matched in pa:
-                        pa.remove(matched)
+                    pa.discard(matched)
                 break
     return final_assignments
 
