@@ -1,6 +1,5 @@
 from datetime import datetime
-from datetime import timedelta
-from collections import defaultdict, deque
+from collections import defaultdict
 
 # .\get.ps1 21
 
@@ -11,20 +10,17 @@ allergens = set()
 possible = dict()
 counts = defaultdict(int)
 for line in lines:
-    line = line.strip()
-    st_br = str.index(line, "(")
-    ed_br = -1
-    assert line[ed_br] == ")"
-    allerg_parts = line[st_br + len("contains ") + 1:ed_br].split(", ")
-    ingrd_parts = line[:st_br].split()
-    for allerg in allerg_parts:
-        allergens.add(allerg)
-        if allerg not in possible:
-            possible[allerg] = set(ingrd_parts)
+    left, right = line.strip().split('(contains ')
+    Is = left.split() # Ingredients
+    As = right[:-1].split(', ') # Allergens
+    for a in As:
+        allergens.add(a)
+        if a not in possible:
+            possible[a] = set(Is)
         else:
-            possible[allerg] &= set(ingrd_parts)
-    for ingrd in ingrd_parts:
-        counts[ingrd] += 1
+            possible[a] &= set(Is)
+    for i in Is:
+        counts[i] += 1
 
 # print("allergens cnt", len(allergens))
 
