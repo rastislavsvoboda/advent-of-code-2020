@@ -28,16 +28,11 @@ for line in lines:
 ASSIGN = {}
 
 while len(ASSIGN) < len(allergens):
-    found_ingrd = None
-    for allerg, ingrds in possible.items():
-        if len(ingrds) == 1:
-            found_ingrd = ingrds.pop()
-            ASSIGN[found_ingrd] = allerg
+    for a in allergens:
+        Is = [i for i in possible[a] if i not in ASSIGN]
+        if len(Is) == 1:
+            ASSIGN[Is[0]] = a
             break
-    assert found_ingrd, "assuming each round eliminates one ingredient"
-    for ingrds in possible.values():
-        ingrds.discard(found_ingrd)
-    del possible[allerg]
 
 # print(ASSIGN)
 res1 = 0
