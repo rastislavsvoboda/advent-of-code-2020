@@ -14,8 +14,8 @@ for line in lines:
     left, right = line.strip().split('(contains ')
     Is = left.split() # Ingredients
     As = right[:-1].split(', ') # Allergens
+    allergens |= set(As)
     for a in As:
-        allergens.add(a)
         if a not in possible:
             possible[a] = set(Is)
         else:
