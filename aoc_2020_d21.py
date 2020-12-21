@@ -37,7 +37,7 @@ while len(ASSIGN) < len(allergens):
     assert found_ingrd, "assuming each round eliminates one ingredient"
     for ingrds in possible.values():
         ingrds.discard(found_ingrd)
-    del possible[ASSIGN[found_ingrd]]
+    del possible[allerg]
 
 # print(ASSIGN)
 res1 = 0
