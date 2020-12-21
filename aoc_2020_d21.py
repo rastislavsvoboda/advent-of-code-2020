@@ -6,6 +6,7 @@ from collections import defaultdict
 start = datetime.now()
 lines = open('21.in').readlines()
 
+# part 1
 allergens = set()
 possible = dict()
 counts = defaultdict(int)
@@ -33,7 +34,7 @@ while len(ASSIGN) < len(allergens):
             found_ingrd = ingrds.pop()
             ASSIGN[found_ingrd] = allerg
             break
-    assert found_ingrd
+    assert found_ingrd, "assuming each round eliminates one ingredient"
     for ingrds in possible.values():
         ingrds.discard(found_ingrd)
     del possible[ASSIGN[found_ingrd]]
@@ -46,6 +47,7 @@ for ingrd, cnt in counts.items():
 
 print("part1:", res1)  # 2874
 
+# part 2
 sorted_by_allerg = sorted(ASSIGN.items(), key=lambda pair: pair[1])
 res2 = ",".join(map(lambda pair: pair[0], sorted_by_allerg))
 print("part2:", res2)  # gfvrr,ndkkq,jxcxh,bthjz,sgzr,mbkbn,pkkg,mjbtz
