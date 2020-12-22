@@ -12,14 +12,12 @@ def get_players(text):
     for grp in text.split('\n\n'):
         entries = []
         for row in grp.split('\n'):
-            if row:
-                entries.append(row)
+            if row and not str.startswith(row, 'Player'):
+                entries.append(int(row))
         data.append(entries)
-    # skip player's label and convert to numbers
-    p1 = [int(x) for x in data[0][1:]]
-    p2 = [int(x) for x in data[1][1:]]
-    assert len(p1) == len(p2)
-    return p1, p2
+    assert len(data) == 2
+    assert len(data[0]) == len(data[1])
+    return data[0], data[1]
 
 
 def game(g, p1, p2, part1):
@@ -27,28 +25,23 @@ def game(g, p1, p2, part1):
     r_num = 1
     q1 = deque(p1)
     q2 = deque(p2)
-    hist1 = set()
-    hist2 = set()
+    hist = set()
     while q1 and q2:
         # print(F"round {r_num} (game {g_num})")
         # print(q1)
         # print(q2)
         # print("------")
         if not part1:
-            curr1 = tuple(list(q1))
-            curr2 = tuple(list(q2))
-
-            if curr1 in hist1 or curr2 in hist2:
+            state = (tuple(q1), tuple(q2))
+            if state in hist:
                 # repeating: winner is player1
                 return (True, q1)
-
-            hist1.add(curr1)
-            hist2.add(curr2)
+            hist.add(state)
 
         n1 = q1.popleft()
         n2 = q2.popleft()
 
-        if not part1 and (len(q1) >= n1 and len(q2)>= n2):
+        if not part1 and (len(q1) >= n1 and len(q2) >= n2):
             # next sub-game
             g[0] += 1
             sub_p1 = list(q1)[:n1]
