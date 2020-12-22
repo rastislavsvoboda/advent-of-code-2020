@@ -54,28 +54,21 @@ def game(g, p1, p2, part1):
             sub_p1 = [c for c in list(curr1)[1:n1 + 1]]
             sub_p2 = [c for c in list(curr2)[1:n2 + 1]]
             p1_wins, _ = game(g, sub_p1, sub_p2, part1)
-            if p1_wins:
-                q1.append(n1)
-                q1.append(n2)
-            else:
-                q2.append(n2)
-                q2.append(n1)
         else:
-            # bigger wins
-            if n1 > n2:
-                q1.append(n1)
-                q1.append(n2)
-                # print("p1 wins")
-            elif n2 > n1:
-                q2.append(n2)
-                q2.append(n1)
-                # print("p2 wins")
+            # higher wins
+            p1_wins = n1 > n2
+
+        if p1_wins:
+            # print("p1 wins")
+            q1.append(n1)
+            q1.append(n2)
+        else:
+            # print("p2 wins")
+            q2.append(n2)
+            q2.append(n1)
         r_num += 1
 
-    if q1:
-        return True, q1
-    else:
-        return False, q2
+    return (True, q1) if q1 else (False, q2)
 
 
 def solve(player1, player2, part1):
