@@ -14,8 +14,9 @@ def get_players(text):
 
 
 def game(g, p1, p2, part1):
-    g_num = g[0]
-    r_num = 1
+    g_cnt = g + 1  # total games played couner
+    g_num = g_cnt  # this game number
+    r_num = 1  # round number
     d1 = deque(p1)
     d2 = deque(p2)
     hist = set()
@@ -28,7 +29,7 @@ def game(g, p1, p2, part1):
             state = (tuple(d1), tuple(d2))
             if state in hist:
                 # repeating: winner is player1
-                return (True, d1)
+                return (True, d1, g_cnt)
             hist.add(state)
 
         n1 = d1.popleft()
@@ -36,10 +37,9 @@ def game(g, p1, p2, part1):
 
         if not part1 and (len(d1) >= n1 and len(d2) >= n2):
             # next sub-game
-            g[0] += 1
             sub_p1 = list(d1)[:n1]
             sub_p2 = list(d2)[:n2]
-            p1_wins, _ = game(g, sub_p1, sub_p2, part1)
+            p1_wins, _, g_cnt = game(g_cnt, sub_p1, sub_p2, part1)
         else:
             # higher wins
             p1_wins = n1 > n2
@@ -54,11 +54,12 @@ def game(g, p1, p2, part1):
             d2.append(n1)
         r_num += 1
 
-    return (True, d1) if d1 else (False, d2)
+    return (True, d1, g_cnt) if d1 else (False, d2, g_cnt)
 
 
 def solve(player1, player2, part1):
-    winner, deck = game([1], player1, player2, part1)
+    winner, deck, games_count = game(0, player1, player2, part1)
+    # print(F"winner: Player {1 if winner else 2}, games played: {games_count}")
     score = sum([(i + 1) * c for i, c in enumerate(reversed(deck))])
     return score
 
