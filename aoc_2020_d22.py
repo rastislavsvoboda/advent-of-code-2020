@@ -116,14 +116,11 @@ def game2(g, p1, p2):
         return False, q2
 
 
-
-
-
 def solve(player1, player2, part1):
     if part1:
         return score(game1(player1, player2))
     else:
-        return score(game2([1, 1], player1, player2))
+        return score(game2([1], player1, player2))
 
 
 player1, player2 = get_players(text)
