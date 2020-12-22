@@ -14,7 +14,7 @@ def get_players(text):
 
 
 def game(g, p1, p2, part1):
-    g_cnt = g + 1  # total games played couner
+    g_cnt = g + 1  # total games played counter
     g_num = g_cnt  # this game number
     r_num = 1  # round number
     d1 = deque(p1)
