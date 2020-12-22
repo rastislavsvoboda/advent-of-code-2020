@@ -48,11 +48,11 @@ def game(g, p1, p2, part1):
         n1 = q1.popleft()
         n2 = q2.popleft()
 
-        if not part1 and (n1 <= len(curr1) - 1 and n2 <= len(curr2) - 1):
+        if not part1 and (n1 <= len(q1) and n2 <= len(q2)):
             # next sub-game
             g[0] += 1
-            sub_p1 = [c for c in list(curr1)[1:n1 + 1]]
-            sub_p2 = [c for c in list(curr2)[1:n2 + 1]]
+            sub_p1 = [c for c in list(q1)[:n1]]
+            sub_p2 = [c for c in list(q2)[:n2]]
             p1_wins, _ = game(g, sub_p1, sub_p2, part1)
         else:
             # higher wins
