@@ -59,7 +59,7 @@ def game(g, p1, p2, part1):
 
 def solve(player1, player2, part1):
     winner, deck, games_count = game(0, player1, player2, part1)
-    # print(F"winner: Player {1 if winner else 2}, games played: {games_count}")
+    print(F"winner: Player {1 if winner else 2}, games played: {games_count}")
     score = sum([(i + 1) * c for i, c in enumerate(reversed(deck))])
     return score
 
