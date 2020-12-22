@@ -54,10 +54,7 @@ def game1(p1, p2):
 
 def score(result):
     _, q = result
-    l = len(q)
-    score = 0
-    for i, c in enumerate(q):
-        score += (l - i) * c
+    score = sum([(i + 1) * c for i, c in enumerate(reversed(q))])
     return score
 
 
