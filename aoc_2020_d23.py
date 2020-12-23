@@ -96,11 +96,6 @@ def solve2(line):
 
         M[dst] = (p1, p2, p3)
 
-        # print("(", selected, ")", list(Q))
-        # print(p1, p2, p3)
-        # print(dst)
-        # print()
-
     # expand all memoried values
     while len(M) > 0:
         x = read(Q, M)
