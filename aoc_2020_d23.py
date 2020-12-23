@@ -54,6 +54,8 @@ def read(q, m):
     x = q.popleft()
     if x in m:
         a, b, c = m[x]
+        # put picked values back to queue in correct order
+        # so they appear like they followed x
         q.appendleft(c)
         q.appendleft(b)
         q.appendleft(a)
@@ -73,28 +75,27 @@ def solve2(line):
     l = len(nums)
     Q = deque(nums)
     M = {}
-    r = 0
-    while r < 10_000_000:
-        r += 1
-        # if r % 1000000 == 0:
-        #     print(r)
-
+    for r in range(10_000_000):
         sel = read(Q, M)
         Q.append(sel)
-
+        
         p1 = read(Q, M)
         p2 = read(Q, M)
         p3 = read(Q, M)
-
         dst = sel
-        # using: in is ~0.5s slower
-        # while dst in [sel, p1, p2, p3]:
         while dst == sel or dst == p1 or dst == p2 or dst == p3:
             dst = dst - 1 if dst > 1 else l
-
         M[dst] = (p1, p2, p3)
 
-    # expand all memoried values
+        # this maybe look nicer, but it's slower
+        # picked = (read(Q, M), read(Q, M), read(Q, M))
+        # dst = sel
+        # while dst == sel or dst in picked:
+        #     dst = dst - 1 if dst > 1 else l
+        # # remember after dst we need to process picked values
+        # M[dst] = picked
+
+    # put all memoried values back to Q
     while len(M) > 0:
         x = read(Q, M)
         Q.append(x)
