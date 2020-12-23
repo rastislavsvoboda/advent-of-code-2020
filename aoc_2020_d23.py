@@ -67,14 +67,14 @@ def solve2(line):
         nums.append(int(x))
 
     highest = max(nums)
-    for i in range(highest + 1, 1000000 + 1):
+    for i in range(highest + 1, 1_000_000 + 1):
         nums.append(i)
 
     l = len(nums)
     Q = deque(nums)
     M = {}
     r = 0
-    while r < 10000000:
+    while r < 10_000_000:
         r += 1
         # if r % 1000000 == 0:
         #     print(r)
@@ -87,7 +87,7 @@ def solve2(line):
         p3 = read(Q, M)
 
         dst = sel
-        # using: in  is slower
+        # using: in is ~0.5s slower
         # while dst in [sel, p1, p2, p3]:
         while dst == sel or dst == p1 or dst == p2 or dst == p3:
             dst -= 1
