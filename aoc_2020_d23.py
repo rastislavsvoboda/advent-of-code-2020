@@ -87,7 +87,7 @@ def solve2(line):
             dst = dst - 1 if dst > 1 else l
         M[dst] = (p1, p2, p3)
 
-        # this maybe look nicer, but it's slower
+        # # this maybe look nicer, but it's ~0.5s slower
         # picked = (read(Q, M), read(Q, M), read(Q, M))
         # dst = sel
         # while dst == sel or dst in picked:
