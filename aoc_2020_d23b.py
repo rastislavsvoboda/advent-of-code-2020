@@ -65,12 +65,20 @@ class LinkedList(object):
         return res
 
 
-def solve1(line):
+def solve(line, part1):
+    rounds = 100 if part1 else 10000000
+
     nums = []
     for x in list(line.strip()):
         nums.append(int(x))
 
-    l = len(nums)        
+    if not part1:
+        # append more values up to million
+        highest = max(nums)
+        for i in range(highest + 1, 1000000 + 1):
+            nums.append(i)
+
+    l = len(nums)
 
     LL = LinkedList()
     current = LL.append(None, nums[0])
@@ -78,93 +86,48 @@ def solve1(line):
     for x in nums[1:]:
         node = node.append(x)
 
-    for r in range(100):
+    for r in range(rounds):
         sel = current.value
-        p1 = current.next
-        p2 = p1.next
-        p3 = p2.next
-        current = p3.next
 
-        p1.remove()
-        p2.remove()
-        p3.remove()
+        # pick next 3
+        current = current.next
+        picked_values = []
+        for _ in range(3):
+            picked = current
+            picked_values.append(picked.value)
+            current = picked.next
+            picked.remove()
 
-        p1_val = p1.value
-        p2_val = p2.value
-        p3_val = p3.value
-
+        # decrease selected to find destination
         dst = sel
-        while dst == sel or dst == p1_val or dst == p2_val or dst == p3_val:
+        while dst == sel or dst in picked_values:
             dst -= 1
             if dst == 0:
                 dst = l
 
-        dst_node = LL.get(dst)
-        p1_ = dst_node.append(p1_val)
-        p2_ = p1_.append(p2_val)
-        p3_ = p2_.append(p3_val)
-
-    nums = LL.to_list()
-    pos1 = nums.index(1)
-    final = nums[pos1 + 1:] + nums[:pos1]
-    res = "".join(map(str, final))
-    return res
-
-
-def solve2(line):
-    nums = []
-    for x in list(line.strip()):
-        nums.append(int(x))
-
-    highest = max(nums)
-    for i in range(highest + 1, 1000000 + 1):
-        nums.append(i)
- 
-    l = len(nums)       
-
-    LL = LinkedList()
-    current = LL.append(None, nums[0])
-    node = current
-    for x in nums[1:]:
-        node = node.append(x)
-
-    for r in range(10000000):
-        sel = current.value
-        p1 = current.next
-        p2 = p1.next
-        p3 = p2.next
-        current = p3.next
-
-        p1.remove()
-        p2.remove()
-        p3.remove()
-
-        p1_val = p1.value
-        p2_val = p2.value
-        p3_val = p3.value
-
-        dst = sel
-        while dst == sel or dst == p1_val or dst == p2_val or dst == p3_val:
-            dst -= 1
-            if dst == 0:
-                dst = l
-
-        dst_node = LL.get(dst)
-        p1_ = dst_node.append(p1_val)
-        p2_ = p1_.append(p2_val)
-        p3_ = p2_.append(p3_val)
+        # append picked values after destination node
+        append_to_node = LL.get(dst)
+        for v in picked_values:
+            append_to_node = append_to_node.append(v)
 
     nums = LL.to_list()
     assert len(nums) == l
     pos1 = nums.index(1)
-    a = nums[(pos1 + 1) % l]
-    b = nums[(pos1 + 2) % l]
-    res = a * b
+
+    if part1:
+        # concat values appearing after 1
+        final = nums[pos1 + 1:] + nums[:pos1]
+        res = "".join(map(str, final))
+    else:
+        # multiply 2 values after 1
+        a = nums[(pos1 + 1) % l]
+        b = nums[(pos1 + 2) % l]
+        res = a * b
     return res
 
 
-print(solve1(line))  # 26354798
-print(solve2(line))  # 166298218695
+print(solve(line, True))  # 26354798
+print(solve(line, False))  # 166298218695
 
 stop = datetime.now()
 print("duration:", stop - start)
