@@ -90,9 +90,7 @@ def solve2(line):
         # using: in is ~0.5s slower
         # while dst in [sel, p1, p2, p3]:
         while dst == sel or dst == p1 or dst == p2 or dst == p3:
-            dst -= 1
-            if dst == 0:
-                dst = l
+            dst = dst - 1 if dst > 1 else l
 
         M[dst] = (p1, p2, p3)
 
