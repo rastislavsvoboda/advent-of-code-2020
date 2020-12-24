@@ -19,9 +19,9 @@ def solve(line, part1):
 
     l = len(ns)
 
-    # nexts stores "pointers"
-    # index is the value itself
-    # next[index] is the value of then following next item
+    # nexts store "pointers"
+    # index is the number value itself
+    # next[index] is the value of the following item
     # 0 index is not used, 0 is not in the list
     nexts = [None] * (l+1)
 
@@ -34,25 +34,25 @@ def solve(line, part1):
     selected = ns[0]
     
     for r in range(rounds):    
-        s_next = nexts[selected]
-        p1 = s_next
-        p1_next = nexts[p1]
-        p2 = p1_next
-        p2_next = nexts[p2]
-        p3 = p2_next
+        p1 = nexts[selected]
+        p2 = nexts[p1]
+        p3 = nexts[p2]
         p3_next = nexts[p3]
 
         dst = selected
         while dst == selected or dst == p1 or dst == p2 or dst == p3:
             dst = dst - 1 if dst > 1 else l
 
-        dst_next = nexts[dst]
+        # previously was:
+        #    (selected) -> p1 -> p2 -> p3 -> p3_next ... dst -> dst_next ...
+        # now it should be:
+        #    selected -> (p3_next) ... dst -> p1 -> p2 -> p3 -> dst_next ...
+        # with old p3_next as new selected
         nexts[selected] = p3_next
+        dst_next = nexts[dst]
         nexts[dst] = p1
         nexts[p3] = dst_next
-
         selected = p3_next
-
 
     if part1:
         res = ""
