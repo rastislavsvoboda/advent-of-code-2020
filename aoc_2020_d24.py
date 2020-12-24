@@ -1,9 +1,5 @@
 from datetime import datetime
-from datetime import timedelta
-from collections import defaultdict, deque
 import copy
-import re
-import time
 
 # .\get.ps1 24
 
@@ -14,7 +10,7 @@ lines = open('24.in').readlines()
 def get_tile_pos(line):
     x, y = 0, 0
     i = 0
-    while i < len(line + " "):
+    while i < len(line):
         c = line[i:i + 1]
         cc = line[i:i + 2]
         if c == "w":
@@ -39,28 +35,10 @@ def get_tile_pos(line):
             x -= 1
             y += 1
             i += 2
-        elif c == ' ' or c == '':
-            break
     return (x, y)
 
 
-def solve1(lines):
-    T = {}
-    for line in lines:
-        line = line.strip()
-        # print(line)
-        pos = get_tile_pos(line)
-        tile = T.get(pos, "w")
-        if tile == "w":
-            T[pos] = "b"
-        else:
-            T[pos] = "w"
-
-    res = sum([1 for x in T.values() if x == "b"])
-    return res
-
-
-def solve2(lines):
+def solve(lines):
     T = {}
     for line in lines:
         line = line.strip()
@@ -70,46 +48,40 @@ def solve2(lines):
             T[pos] = "b"
         else:
             T[pos] = "w"
+    res1 = sum([1 for x in T.values() if x == "b"])
 
-    for i in range(100):
+    ADJS = [(-2, 0), (2, 0), (1, 1), (-1, 1), (1, -1), (-1, -1)]
+
+    for day in range(100):
         newT = copy.deepcopy(T)
         xs = list(map(lambda k: k[0], T.keys()))
         ys = list(map(lambda k: k[1], T.keys()))
         minx, maxx = min(xs), max(xs)
         miny, maxy = min(ys), max(ys)
 
-        for xx in range(min(xs) - 1, max(xs) + 2):
-            for yy in range(min(ys) - 1, max(ys) + 2):
-                if (xx % 2) != (yy % 2):
+        for x in range(min(xs) - 1, max(xs) + 2):
+            for y in range(min(ys) - 1, max(ys) + 2):
+                if (x % 2) != (y % 2):
                     continue
                 cnt = 0
-                for dx, dy in [(-2, 0), (2, 0), (1, 1), (-1, 1), (1, -1), (-1, -1)]:
-                    p = (xx + dx, yy + dy)
-                    tile = T.get(p, "w")
-                    if tile == "b":
+                for dx, dy in ADJS:
+                    p = (x + dx, y + dy)
+                    if T.get(p, "w") == "b":
                         cnt += 1
-                me = T.get((xx, yy), "w")
-                if me == "b" and (cnt == 0 or cnt > 2):
-                    newT[(xx, yy)] = "w"
-                elif me == "w" and cnt == 2:
-                    newT[(xx, yy)] = "b"
+                tile = T.get((x, y), "w")
+                if tile == "b" and (cnt == 0 or cnt > 2):
+                    newT[(x, y)] = "w"
+                elif tile == "w" and cnt == 2:
+                    newT[(x, y)] = "b"
         T = newT
-
         # res = sum([1 for x in T.values() if x == "b"])
-        # print(F"Day {i}: {res}")
+        # print(F"Day {day+1}: {res}")
 
-    res = sum([1 for x in T.values() if x == "b"])
-    return res
+    res2 = sum([1 for x in T.values() if x == "b"])
+    return res1, res2
 
 
-# t0 = "nwwswee"
-# print(get_tile_pos(t0))
-
-# t1 = "esew"
-# print(get_tile_pos(t1))
-
-print(solve1(lines))  # 287
-print(solve2(lines))  # 3636
+print(solve(lines))  # 287, 3636
 
 stop = datetime.now()
 print("duration:", stop - start)
