@@ -1,9 +1,5 @@
 from datetime import datetime
-from datetime import timedelta
-from collections import defaultdict, deque
-import copy
-import re
-import time
+from itertools import product
 
 # .\get.ps1 17
 
@@ -13,28 +9,17 @@ lines = open('17.in').readlines()
 
 def get_adjs3D(p):
     (x, y, z) = p
-    offsets = [-1, 0, 1]
-    adjs = []
-    for dx in offsets:
-        for dy in offsets:
-            for dz in offsets:
-                if dx == dy == dz == 0:
-                    continue
-                adjs.append((x + dx, y + dy, z + dz))
+    perms = product([-1, 0, 1], repeat=3)
+    adjs = [(x + dx, y + dy, z + dz) for dx, dy, dz in perms
+            if not (dx == 0 and dy == 0 and dz == 0)]
     return adjs
 
 
 def get_adjs4D(p):
     (x, y, z, w) = p
-    offsets = [-1, 0, 1]
-    adjs = []
-    for dx in offsets:
-        for dy in offsets:
-            for dz in offsets:
-                for dw in offsets:
-                    if dx == dy == dz == dw == 0:
-                        continue
-                    adjs.append((x + dx, y + dy, z + dz, w + dw))
+    perms = product([-1, 0, 1], repeat=4)
+    adjs = [(x + dx, y + dy, z + dz, w + dw) for dx, dy, dz, dw in perms
+            if not (dx == 0 and dy == 0 and dz == 0 and dw == 0)]
     return adjs
 
 
