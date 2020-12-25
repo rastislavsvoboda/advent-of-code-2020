@@ -24,61 +24,62 @@ def get_adjs4D(p):
 
 
 def solve1(lines):
-    M = set()
-
+    # will contain only cells that are "on" (#)
+    S = set()
+    z = 0
     for y, line in enumerate(lines):
         for x, c in enumerate(list(line.strip())):
             if c == "#":
-                M.add((x, y, 0))
+                S.add((x, y, z))
 
     for _ in range(6):
-        newM = set()
+        newS = set()
         to_check = set()
 
-        for p in M:
+        for p in S:
             to_check.add(p)
             for adj in get_adjs3D(p):
                 to_check.add(adj)
 
         for p in to_check:
-            cnt = len([_ for adj in get_adjs3D(p) if adj in M])
-            is_on = p in M
+            cnt = len([_ for adj in get_adjs3D(p) if adj in S])
+            is_on = p in S
             if is_on and (cnt == 2 or cnt == 3):
-                newM.add(p)
+                newS.add(p)
             elif not is_on and cnt == 3:
-                newM.add(p)
-        M = newM
-    res = len(M)
+                newS.add(p)
+        S = newS
+    res = len(S)
     return res
 
 
 def solve2(lines):
-    M = set()
-    offsets = [-1, 0, 1]
-
+    # will contain only cells that are "on" (#)
+    S = set()
+    z = w = 0
     for y, line in enumerate(lines):
         for x, c in enumerate(list(line.strip())):
             if c == "#":
-                M.add((x, y, 0, 0))
+                S.add((x, y, z, w))
 
     for _ in range(6):
-        newM = set()
+        newS = set()
         to_check = set()
 
-        for p in M:
+        for p in S:
             to_check.add(p)
             for adj in get_adjs4D(p):
                 to_check.add(adj)
 
         for p in to_check:
-            cnt = len([_ for adj in get_adjs4D(p) if adj in M])
-            is_on = p in M
+            cnt = len([_ for adj in get_adjs4D(p) if adj in S])
+            is_on = p in S
             if is_on and (cnt == 2 or cnt == 3):
-                newM.add(p)
+                newS.add(p)
             elif not is_on and cnt == 3:
-                newM.add(p)
-        M = newM
-    res = len(M)
+                newS.add(p)
+        S = newS
+    res = len(S)
     return res
 
 
