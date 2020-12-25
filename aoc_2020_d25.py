@@ -26,8 +26,7 @@ def get_encryption_key(public_key, loop_size, divider):
 
 
 def solve(lines):
-    card_pk = int(lines[0])
-    door_pk = int(lines[1])
+    card_pk, door_pk = list(map(int, lines))
 
     # sample
     # card_pk = 5764801
@@ -37,10 +36,10 @@ def solve(lines):
     subj = 7
 
     card_ls = get_loopsize(subj, card_pk, divider)
-    print("card loop size", card_ls)
+    # print("card loop size", card_ls)
 
     door_ls = get_loopsize(subj, door_pk, divider)
-    print("door loop size", door_ls)
+    # print("door loop size", door_ls)
 
     enc_key1 = get_encryption_key(card_pk, door_ls, divider)
     enc_key2 = get_encryption_key(door_pk, card_ls, divider)
