@@ -44,9 +44,7 @@ def solve1(lines):
         for p in to_check:
             cnt = len([_ for adj in get_adjs3D(p) if adj in S])
             is_on = p in S
-            if is_on and (cnt == 2 or cnt == 3):
-                newS.add(p)
-            elif not is_on and cnt == 3:
+            if (is_on and (cnt == 2 or cnt == 3)) or (not is_on and cnt == 3):
                 newS.add(p)
         S = newS
     res = len(S)
@@ -74,9 +72,7 @@ def solve2(lines):
         for p in to_check:
             cnt = len([_ for adj in get_adjs4D(p) if adj in S])
             is_on = p in S
-            if is_on and (cnt == 2 or cnt == 3):
-                newS.add(p)
-            elif not is_on and cnt == 3:
+            if (is_on and (cnt == 2 or cnt == 3)) or (not is_on and cnt == 3):
                 newS.add(p)
         S = newS
     res = len(S)
