@@ -11,7 +11,7 @@ def get_adjs3D(p):
     (x, y, z) = p
     offsets = product([-1, 0, 1], repeat=3)
     adjs = [(x + dx, y + dy, z + dz) for dx, dy, dz in offsets
-            if not (dx == 0 and dy == 0 and dz == 0)]
+            if (dx, dy, dz) != (0, 0, 0)]
     return adjs
 
 
@@ -19,7 +19,7 @@ def get_adjs4D(p):
     (x, y, z, w) = p
     offsets = product([-1, 0, 1], repeat=4)
     adjs = [(x + dx, y + dy, z + dz, w + dw) for dx, dy, dz, dw in offsets
-            if not (dx == 0 and dy == 0 and dz == 0 and dw == 0)]
+            if (dx, dy, dz, dw) != (0, 0, 0, 0)]
     return adjs
 
 
