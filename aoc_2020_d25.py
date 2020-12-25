@@ -1,9 +1,4 @@
 from datetime import datetime
-from datetime import timedelta
-from collections import defaultdict, deque
-import copy
-import re
-import time
 
 # .\get.ps1 25
 
@@ -31,16 +26,16 @@ def get_encryption_key(public_key, loop_size, divider):
 
 
 def solve(lines):
-    card_pk = int(lines[0].strip())
-    door_pk = int(lines[1].strip())
+    card_pk = int(lines[0])
+    door_pk = int(lines[1])
 
     # sample
     # card_pk = 5764801
     # door_pk = 17807724
 
     divider = 20201227
-
     subj = 7
+
     card_ls = get_loopsize(subj, card_pk, divider)
     print("card loop size", card_ls)
 
