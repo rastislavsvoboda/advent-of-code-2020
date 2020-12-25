@@ -25,13 +25,11 @@ def get_adjs4D(p):
 
 def solve1(lines):
     M = set()
-    sizeX = len(lines[0]) // 2
-    sizeY = len(lines) // 2
 
     for y, line in enumerate(lines):
         for x, c in enumerate(list(line.strip())):
             if c == "#":
-                M.add((x - sizeX, y - sizeY, 0))
+                M.add((x, y, 0))
 
     for _ in range(6):
         newM = set()
@@ -43,12 +41,9 @@ def solve1(lines):
                 to_check.add(adj)
 
         for p in to_check:
-            cnt = 0
-            for adj in get_adjs3D(p):
-                if adj in M:
-                    cnt += 1
+            cnt = len([_ for adj in get_adjs3D(p) if adj in M])
             is_on = p in M
-            if is_on and cnt in [2, 3]:
+            if is_on and (cnt == 2 or cnt == 3):
                 newM.add(p)
             elif not is_on and cnt == 3:
                 newM.add(p)
@@ -59,14 +54,12 @@ def solve1(lines):
 
 def solve2(lines):
     M = set()
-    sizeX = len(lines[0]) // 2
-    sizeY = len(lines) // 2
     offsets = [-1, 0, 1]
 
     for y, line in enumerate(lines):
         for x, c in enumerate(list(line.strip())):
             if c == "#":
-                M.add((x - sizeX, y - sizeY, 0, 0))
+                M.add((x, y, 0, 0))
 
     for _ in range(6):
         newM = set()
@@ -78,12 +71,9 @@ def solve2(lines):
                 to_check.add(adj)
 
         for p in to_check:
-            cnt = 0
-            for adj in get_adjs4D(p):
-                if adj in M:
-                    cnt += 1
+            cnt = len([_ for adj in get_adjs4D(p) if adj in M])
             is_on = p in M
-            if is_on and cnt in [2, 3]:
+            if is_on and (cnt == 2 or cnt == 3):
                 newM.add(p)
             elif not is_on and cnt == 3:
                 newM.add(p)
