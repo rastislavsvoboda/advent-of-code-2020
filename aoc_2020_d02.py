@@ -27,12 +27,8 @@ def is_valid2(entry):
     return p1_ok ^ p2_ok  # xor, for bool should work also p1_ok != p2_ok
 
 
-def solve1(entries):
-    return len(list(filter(is_valid1, entries)))
-
-
-def solve2(entries):
-    return len(list(filter(is_valid2, entries)))
+def solve(valid_fn, entries):
+    return len(list(filter(valid_fn, entries)))
 
 
 # print(is_valid2((1,3,"c","abcde")))
@@ -40,8 +36,8 @@ def solve2(entries):
 # print(is_valid2((2,9,"c","ccccccccc")))
 
 entries = list(map(parse, lines))
-print(solve1(entries))  # 582
-print(solve2(entries))  # 729
+print(solve(is_valid1, entries))  # 582
+print(solve(is_valid2, entries))  # 729
 
 stop = datetime.now()
 print("duration:", stop - start)
