@@ -27,11 +27,11 @@ def is_valid2(entry):
     return p1_ok ^ p2_ok  # xor, for bool should work also p1_ok != p2_ok
 
 
-def solve1(lines):
+def solve1(entries):
     return len(list(filter(is_valid1, entries)))
 
 
-def solve2(lines):
+def solve2(entries):
     return len(list(filter(is_valid2, entries)))
 
 
