@@ -24,7 +24,7 @@ res1 = passports.count { |x| is_valid1?(x,reqs) }
 puts res1 # 219
 
 def is_valid2?(passport, reqs)
-    reqs.all? { |k,v| passport[k] && v[passport[k]] }
+    reqs.all? { |k,v| passport[k] && v.(passport[k]) }
 end
 
 res2 = passports.count { |x| is_valid2?(x,reqs) } 
