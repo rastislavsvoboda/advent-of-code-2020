@@ -6,6 +6,7 @@ from copy import deepcopy
 start = datetime.now()
 lines = open('24.in').readlines()
 
+
 def get_tile_pos(line, m):
     x, y = 0, 0
     i = 0
@@ -33,7 +34,7 @@ def solve(lines):
         "nw": (-1, -1),
         "se": (1, 1),
         "sw": (-1, 1)
-    }    
+    }
     blacks = set()
     for line in lines:
         line = line.strip()
@@ -47,23 +48,17 @@ def solve(lines):
     for day in range(100):
         new_blacks = set()
         to_check = set()
-        for (x,y) in blacks:
-            to_check.add((x,y))
+        for (x, y) in blacks:
+            to_check.add((x, y))
             for dx, dy in M.values():
                 to_check.add((x + dx, y + dy))
 
-        for (x,y) in to_check:
-            cnt = 0
-            for dx, dy in M.values():
-                p = (x + dx, y + dy)
-                if p in blacks:
-                    cnt +=1
-            is_black = (x,y) in blacks
-            if is_black and not (cnt == 0 or cnt > 2):
-                new_blacks.add((x,y))
-            elif not is_black and cnt == 2:
-                new_blacks.add((x,y))
-            
+        for (x, y) in to_check:
+            cnt = len([1 for dx, dy in M.values() if (x + dx, y + dy) in blacks])
+            is_black = (x, y) in blacks
+            if (is_black and (cnt == 1 or cnt == 2)) or (not is_black and cnt == 2):
+                new_blacks.add((x, y))
+
         blacks = new_blacks
         # res = len(blacks)
         # print(F"Day {day+1}: {res}")
