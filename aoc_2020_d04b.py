@@ -10,21 +10,11 @@ text = open('4.in').read()
 
 
 def get_data(text):
-    data = []
     for grp in text.split('\n\n'):
-        entries = []
-        for row in grp.split():
-            entries.append(row)
-        data.append(parse_entry(entries))
-    return data
-
+        entries = [ row for row in grp.split() ]
+        yield parse_entry(entries)
 
 def parse_entry(entries):
-    # passport = {}
-    # for entry in entries:
-    #     k, v = entry.split(':')
-    #     passport[k] = v
-    # return passport
     return { k:v for k,v in [entry.split(':') for entry in entries] }
 
 
@@ -66,17 +56,13 @@ def is_valid2(passport):
     return True
 
 
-def solve1(text):
-    # return sum(1 for p in get_data(text) if is_valid1(p)) 
-    return len(list(filter(lambda p: is_valid1(p), get_data(text))))
+def solve(valid_fn, data):
+    return len(list(filter(valid_fn, data)))
 
 
-def solve2(text):
-    return len(list(filter(lambda p: is_valid2(p), get_data(text))))
-
-
-print(solve1(text))  # 219
-print(solve2(text))  # 127
+data = list(get_data(text))
+print(solve(is_valid1, data))  # 219
+print(solve(is_valid2, data))  # 127
 
 stop = datetime.now()
 print("duration:", stop - start)

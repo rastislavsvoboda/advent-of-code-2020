@@ -12,10 +12,7 @@ lines = open('4.in').readlines()
 def is_valid1(passport):
     required = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
     keys = passport.keys()
-    for req in required:
-        if req not in keys:
-            return False
-    return True
+    return all(r in keys for r in required)
 
 
 def in_range(val, minval, maxval):
